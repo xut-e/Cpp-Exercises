@@ -560,7 +560,7 @@ void main() {
 	}
 	
 	std::cout << "-  Las respuestas correctas eran:" << std::endl;
-	std::cout << "\t" << "b) Tokio" << std::endl << "\t" << "a) Ocho" << std::endl << "\t" << "c) Leonardo da Vinci" << std::endl << "\t" << "c) Pacifico" << std::endl << "\t" << "c) Africa" << std::endl << "\t" << "a) 30" << std::endl << "\t" << "b) Italia" << std::endl << "\t" << "a) Oxigeno" << std::endl << "\t" << "b) Guepardo" << std::endl << "\t" << "b) Yen" << std::endl;
+	std::cout << "\t" << "b) Tokio" << std::endl << "\t" << "a) Ocho" << std::endl << "\t" << "c) Leonardo da Vinci" << std::endl << "\t" << "c) Pacifico" << std::endl << "\t" << "c) Africa" << std::endl << "\t" << "a) 30" << std::endl << "\t" << "b) Italia" << std::endl << "\t" << "a) Oxigeno" << std::endl << "\t" << "b) Guepardo" << std::endl << "\t" << "b) Yuan" << std::endl;
 	if (contadorBien != 1) {
 		std::cout << "-  Tuviste un total de " << contadorBien << " respuestas bien." << std::endl;
 	}
