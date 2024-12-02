@@ -1,3 +1,5 @@
+//9. Crea un programa que pida al usuario el lado de un cuadrado y con ello calcule su área.
+
 #include <iostream>
 
 void main() {

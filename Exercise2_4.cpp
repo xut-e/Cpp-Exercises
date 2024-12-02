@@ -1,3 +1,6 @@
+//4. Pregúntale al usuario por su nombre, su edad y su comida favorita. A continuación muestra por pantalla los 3 datos en orden.
+
+
 #include <iostream>
 #include <string>
 

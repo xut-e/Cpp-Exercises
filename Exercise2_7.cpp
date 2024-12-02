@@ -1,3 +1,5 @@
+//7. Crea un programa que pida un número al usuario y muestra su valor negado (si introduce 1 debe mostrar-1 y si introduce-1 debe mostrar 1).
+
 #include <iostream>
 
 void main() {

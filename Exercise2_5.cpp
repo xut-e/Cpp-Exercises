@@ -1,3 +1,6 @@
+//5. Genera un programa que obtenga el siguiente resultado (incluyendo el aspecto visual).
+
+
 #include <iostream>
 #include <string>
 //Incluimos las librerías.

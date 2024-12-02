@@ -1,3 +1,5 @@
+//3. Pregunta por pantalla el nombre del usuario y luego le saludas mencionando su nombre.
+
 #include <iostream>
 
 void main() {

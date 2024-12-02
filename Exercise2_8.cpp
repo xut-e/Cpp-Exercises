@@ -1,3 +1,5 @@
+//8. Crea un programa que pida al usuario un número de 6 cifras y muestre en orden qué número equivale a las unidades, cual a las decenas, cual a las centenas, etcétera…
+
 #include <iostream>
 
 void main() {
