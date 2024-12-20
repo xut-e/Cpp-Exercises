@@ -10,11 +10,27 @@ void main() {
 	
 	bool mencionado1 = false, mencionado2 = false, mencionado3 = false, mencionado4 = false, mencionado5 = false;
 
-	if (mencionado1 == true && mencionado2 == true && mencionado3 == true && mencionado4 == true && mencionado5 == true) 
+	if (respuesta == ing1 && !mencionado1)
 	{
-		std::cout << "Enorabuena! Has mencionado todos los ingredientes" << std::endl;
+		mencionado1 = true;
 	}
-	else 
+	else if (respuesta == ing2 && !mencionado2) 
+	{
+		mencionado2 = true;
+	}
+	else if (respuesta == ing3 && !mencionado3)
+	{
+		mencionado3 = true;
+	}
+	else if (respuesta == ing4 && !mencionado4)
+	{
+		mencionado4 = true;
+	}
+	else if (respuesta == ing5 && !mencionado5)
+	{
+		mencionado5 = true;
+	}
+	else if (respuesta == ing1 && mencionado1 || respuesta == ing2 && mencionado2 || respuesta == ing3 && mencionado3 || )
 	{
 
 	}
