@@ -1,3 +1,5 @@
+// 7. Crea un programa que pida al usuario un número del 1 al 12 e imprima la cantidad de días que tiene ese mes.
+
 #include <iostream>
 
 void main() {

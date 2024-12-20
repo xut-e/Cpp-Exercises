@@ -1,3 +1,5 @@
+// 6. Crea un programa que pedirá al usuario los 3 lados de un triángulo. El programa debe de categorizar este triángulo como equilátero, isósceles o escaleno.
+
 #include <iostream>
 
 void main() {

@@ -1,3 +1,4 @@
+// 5. Crea un programa que pida al usuario dos números pares y si ambos lo son sume, de lo contrario reste.
 #include <iostream>
 
 void main() {
