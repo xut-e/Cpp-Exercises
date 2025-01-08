@@ -32,7 +32,7 @@
 #include <Windows.h>
 
 void main() {
-    int capitalActual = 500000, contadorDias = 0, capitalUsuarioRondaActual = 0, fondosReservados = 0;
+    int capitalActual = 500000, contadorDias = 0, capitalUsuarioRondaActual = 0, fondosReservados = 0, dineroInversionRiesgo = 0;
     char opcionElegida;
     bool gastado1 = false, gastado2 = false, gastado3 = false;
 
@@ -71,7 +71,7 @@ void main() {
 
         do
         {
-            std::cout << "Con el dinero actual que tienes (" << capitalUsuarioRondaActual << ") puedes repartirlo entre (puedes no gastar en alguna):" << std::endl;
+            std::cout << "Con el dinero actual que tienes (" << capitalUsuarioRondaActual << " euros) puedes repartirlo entre (puedes no gastar en alguna):" << std::endl;
             std::cout << "\t" << "1) Inversion de riesgo." << std::endl;
             std::cout << "\t" << "2) Seguridad." << std::endl;
             std::cout << "\t" << "3) Distribucion a oficinas." << std::endl;
@@ -90,8 +90,23 @@ void main() {
             {
             case '1':
 
+                do
+                {
+                    std::cout << "Elija la cantidad de dinero que desea depositar en la inversion de riesgo: ";
+                    std::cin >> dineroInversionRiesgo;
 
-
+                    if (dineroInversionRiesgo <= 0) 
+                    {
+                        std::cout << "No puedes introducir valores negativos o nulos." << std::endl;
+                    }
+                    else if (dineroInversionRiesgo > capitalUsuarioRondaActual)
+                    {
+                        std::cout << "No puedes invertir tanto dinero en riesgo, solo dispones de " << capitalUsuarioRondaActual << " euros." << std::endl;
+                    }
+                    
+                } while (dineroInversionRiesgo <= 0 || dineroInversionRiesgo > capitalUsuarioRondaActual);
+                
+                gastado1 = true;
                 break;
             case '2':
 
