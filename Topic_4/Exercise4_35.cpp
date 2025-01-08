@@ -32,7 +32,8 @@
 #include <Windows.h>
 
 void main() {
-    int capitalActual = 500000, contadorDias = 0, capitalUsuarioRondaActual = 0, fondosReservados = 0, dineroInversionRiesgo = 0;
+    int capitalActual = 500000, contadorDias = 0, capitalUsuarioRondaActual = 0, fondosReservados = 0, dineroInversionRiesgo = 0, fondoRiesgo = 0, seguridadMaxima = 100;
+    float seguridadActual = 0.75;
     char opcionElegida;
     bool gastado1 = false, gastado2 = false, gastado3 = false;
 
@@ -47,7 +48,7 @@ void main() {
     while (capitalActual < 1500000 && contadorDias < 10)
     {
 
-        std::cout << "COMIENZA LA RONDA: " << contadorDias + 1 << std::endl;
+        std::cout << std::endl << "COMIENZA LA RONDA: " << contadorDias + 1 << std::endl;
         
         if (capitalActual <= 0)
         {
@@ -109,6 +110,10 @@ void main() {
                     
                 } while (dineroInversionRiesgo <= 0 || dineroInversionRiesgo > capitalUsuarioRondaActual);
                 
+                capitalUsuarioRondaActual -= dineroInversionRiesgo;
+
+                fondoRiesgo += dineroInversionRiesgo;
+
                 gastado1 = true;
                 break;
             case '2':
@@ -132,7 +137,7 @@ void main() {
             }
 
             // Control para que el usuario gaste al menos en alguna opcion.
-        } while ((!gastado1 && !gastado2 && !gastado3) && (opcionElegida != '1' && opcionElegida != '2' && opcionElegida != '3'));
+        } while (!(gastado1 || gastado2 || gastado3) || (opcionElegida == '1' || opcionElegida == '2' || opcionElegida == '3'));
 
         contadorDias++;
     }
