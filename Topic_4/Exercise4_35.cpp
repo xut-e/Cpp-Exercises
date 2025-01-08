@@ -46,6 +46,9 @@ void main() {
 
     while (capitalActual < 1500000 && contadorDias < 10)
     {
+
+        std::cout << "COMIENZA LA RONDA: " << contadorDias + 1 << std::endl;
+        
         if (capitalActual <= 0)
         {
             break;
@@ -119,8 +122,12 @@ void main() {
 
                 break;
             default:
-                std::cout << "Saliendo..." << std::endl;
-                Sleep(1000);
+                if (gastado1 || gastado2 || gastado3)
+                {
+                    std::cout << "Saliendo..." << std::endl;
+                    Sleep(1000);
+                }
+                
                 break;
             }
 
