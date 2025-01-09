@@ -52,6 +52,8 @@ void main() {
 
         std::cout << std::endl << "COMIENZA LA RONDA: " << contadorDias + 1 << std::endl;
         
+        std::cout << "El capital actual del banco es de " << capitalActual << " euros." << std::endl;
+
         if (capitalActual <= 0)
         {
             break;
@@ -59,11 +61,6 @@ void main() {
         gastado1 = false;
         gastado2 = false;
         gastado3 = false;
-
-        if (contadorDias > 0 && seguridadActual > 0)
-        {
-            seguridadActual -= 0.05;
-        }
 
         // Le damos al usuario el capital que le corresponde por ronda del banco.
         if (capitalActual >= 200000)
@@ -80,12 +77,12 @@ void main() {
         // Le damos el capital pasivo al usuario.
         capitalUsuarioRondaActual += 100000;
 
+        fondoRiesgo = 0;
+        fondoSeguridad = 0;
+        fondoOficinas = 0;
+
         do
         {
-            fondoRiesgo = 0;
-            fondoSeguridad = 0;
-            fondoOficinas = 0;
-
             std::cout << "Con el dinero actual que tienes (" << capitalUsuarioRondaActual << " euros) puedes repartirlo entre (puedes no gastar en alguna):" << std::endl;
             std::cout << "\t" << "1) Inversion de riesgo." << std::endl;
             std::cout << "\t" << "2) Seguridad." << std::endl;
@@ -219,6 +216,7 @@ void main() {
         if (gastado1)
         {
             int numeroAleatorioRiesgo = rand() % (100 - 1 + 1) + 1;
+            //std::cout << std::endl << numeroAleatorioRiesgo << std::endl;
 
             if (numeroAleatorioRiesgo <= riesgoMaximo * posibilidadTriplicar)
             {
@@ -239,12 +237,13 @@ void main() {
         }
         if (gastado2)
         {
-            seguridadActual += (fondoSeguridad / 10000 / 100);
+            seguridadActual += (fondoSeguridad / 10000) * 0.01;
         }
 
         std::cout << "La seguridad actual es del " << seguridadActual * 100 << "%." << std::endl;
 
         int numeroAleatorioSeguridad = rand() % (100 - 1 + 1) + 1;
+        //std::cout << std::endl << numeroAleatorioSeguridad;
 
         if (numeroAleatorioSeguridad <= seguridadMaxima * seguridadActual)
         {
@@ -252,11 +251,12 @@ void main() {
         }
         else
         {
-            std::cout << "Ha ocurrido un fallo de seguridad, se retiraran de los fondos " << (1 - seguridadActual) * seguridadMaxima << " euros." << std::endl;
-            capitalActual -= capitalActual * (1 - seguridadActual);
+            std::cout << "Ha ocurrido un fallo de seguridad, se retiraran de los fondos " << (1.0f - seguridadActual) * capitalActual << " euros." << std::endl;
+            capitalActual -= capitalActual * (1.0f - seguridadActual);
         }
 
         int numeroAleatorioOficinas = rand() % (100 - 20 + 1) + 20;
+        //std::cout << std::endl << numeroAleatorioOficinas;
 
         if (fondoOficinas >= numeroAleatorioOficinas * 1000)
         {
@@ -266,9 +266,9 @@ void main() {
         }
         else if (fondoOficinas < numeroAleatorioOficinas * 1000 && fondoOficinas > 0)
         {
-            std::cout << "No has tenido suficiente dinero para cubrir los gastos de oficinas, se te quitan esos fondos mas " << ((penalizacion - fondoOficinas) - capitalActual * porcentajePenalizacion) << " euros." << std::endl;
+            std::cout << "No has tenido suficiente dinero para cubrir los gastos de oficinas, se te quitan esos fondos mas " << ((penalizacion - fondoOficinas) + capitalActual * porcentajePenalizacion) << " euros." << std::endl;
 
-            capitalActual -= ((penalizacion - fondoOficinas) - capitalActual * porcentajePenalizacion);
+            capitalActual -= ((penalizacion - fondoOficinas) + capitalActual * porcentajePenalizacion);
         }
         else
         {
@@ -281,18 +281,27 @@ void main() {
         capitalUsuarioRondaActual = 0;
 
         contadorDias++;
+
+        if ( seguridadActual > 0.5)
+        {
+            seguridadActual -= 0.05;
+        }
+        else
+        {
+            seguridadActual = 0;
+        }
     }
 
     if (capitalActual >= 1500000)
     {
-        std::cout << "Enhorabuena, has ganado el juego!" << std::endl;
+        std::cout << std::endl << "Enhorabuena, has ganado el juego!" << std::endl;
     }
     else if (capitalActual <= 0)
     {
-        std::cout << "Has perdido todo el dinero." << std::endl;
+        std::cout << std::endl << "Has perdido todo el dinero." << std::endl;
     }
     else
     {
-        std::cout << "Han pasado 10 dias y no has sido capaz de recaudar el capital necesario. Has perdido." << std::endl;
+        std::cout << std::endl << "Han pasado 10 dias y no has sido capaz de recaudar el capital necesario. Has perdido." << std::endl;
     }
 }
