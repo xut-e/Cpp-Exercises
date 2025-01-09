@@ -32,7 +32,7 @@
 #include <Windows.h>
 
 void main() {
-    int capitalActual = 500000, contadorDias = 0, capitalUsuarioRondaActual = 0, fondosReservados = 0, dineroInversionRiesgo = 0, fondoRiesgo = 0, seguridadMaxima = 100;
+    int capitalActual = 500000, contadorDias = 0, capitalUsuarioRondaActual = 0, fondosReservados = 0, dineroInversionRiesgo = 0, fondoRiesgo = 0, seguridadMaxima = 100, fondoSeguridad = 0, dineroInversionSeguridad;
     float seguridadActual = 0.75;
     char opcionElegida;
     bool gastado1 = false, gastado2 = false, gastado3 = false;
@@ -58,6 +58,11 @@ void main() {
         gastado2 = false;
         gastado3 = false;
 
+        if (contadorDias > 0)
+        {
+            seguridadActual -= 0.05;
+        }
+
         // Le damos al usuario el capital que le corresponde por ronda del banco.
         if (capitalActual >= 200000)
         {
@@ -75,6 +80,9 @@ void main() {
 
         do
         {
+            fondoRiesgo = 0;
+            fondoSeguridad = 0;
+
             std::cout << "Con el dinero actual que tienes (" << capitalUsuarioRondaActual << " euros) puedes repartirlo entre (puedes no gastar en alguna):" << std::endl;
             std::cout << "\t" << "1) Inversion de riesgo." << std::endl;
             std::cout << "\t" << "2) Seguridad." << std::endl;
@@ -96,6 +104,11 @@ void main() {
 
                 do
                 {
+                    if (fondoRiesgo > 0)
+                    {
+                        std::cout << "Tu fondo de riesgo para esta ronda es de: " << fondoRiesgo << " euros." << std::endl;
+                    }
+
                     std::cout << "Elija la cantidad de dinero que desea depositar en la inversion de riesgo: ";
                     std::cin >> dineroInversionRiesgo;
 
@@ -115,10 +128,40 @@ void main() {
                 fondoRiesgo += dineroInversionRiesgo;
 
                 gastado1 = true;
+
                 break;
             case '2':
 
+                do
+                {
+                    if (fondoSeguridad > 0)
+                    {
+                        std::cout << "Tu fondo de seguridad para esta ronda es de: " << fondoSeguridad << " euros." << std::endl;
+                    }
 
+                    std::cout << "Elija la cantidad de dinero que desea depositar en la inversion de seguridad: ";
+                    std::cin >> dineroInversionSeguridad;
+
+                    if (dineroInversionSeguridad <= 0)
+                    {
+                        std::cout << "No puedes introducir valores negativos o nulos." << std::endl;
+                    }
+                    else if (dineroInversionSeguridad > capitalUsuarioRondaActual)
+                    {
+                        std::cout << "No puedes invertir tanto dinero en seguridad, solo dispones de " << capitalUsuarioRondaActual << " euros." << std::endl;
+                    }
+                    if (seguridadActual + dineroInversionSeguridad / 10000 * 0.01 > 1)
+                    {
+                        std::cout << "No puedes invertir tanto dinero en seguridad esta ronda, el maximo es: " << (1 - seguridadActual) * 1000000 << " euros." << std::endl;
+                    }
+
+                } while (dineroInversionSeguridad <= 0 || dineroInversionSeguridad > capitalUsuarioRondaActual || (seguridadActual + (dineroInversionSeguridad / 10000 * 0.01)) > 1);
+
+                capitalUsuarioRondaActual -= dineroInversionSeguridad;
+
+                fondoSeguridad += dineroInversionSeguridad;
+
+                gastado2 = true;
 
                 break;
             case '3':
