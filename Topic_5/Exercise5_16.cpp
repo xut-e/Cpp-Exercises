@@ -1,4 +1,4 @@
-/* 16.Crear un programa que encuentre la moda en un array de enteros. */
+/* 16. Crear un programa que encuentre la moda en un array de enteros. */
 
 #include <iostream>
 
