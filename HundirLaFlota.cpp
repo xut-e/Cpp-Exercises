@@ -68,7 +68,7 @@ int main() {
 	for (int i = 3; i < numeroBarcos + 1; i++)
 	{
 		// Convertimos i (que es el tamaño del barco) en un char con su mismo valor para poder almacenarlo en nuestros tableros.
-		char tamanyoBarco = i + '0';
+		char tamanyoBarco = i + '0'; // La IA me ha dicho varias maneras de converir una variable int en char y he eelegido esta.
 
 		// Booleano para saber cuando un barco esta bien puesto y se puede pasar al siguiente.
 		bool barcoBienPuesto = false;
@@ -80,130 +80,114 @@ int main() {
 			bool superpuesto = false;
 
 			// Generación de números aleatorios para determinar posición (fila y columna) y dirección (como en cuadrantes [1: Derecha, 2: Arriba, 3: Izquierda, 4: Abajo])
-			int posicionAleatoriaFila = rand() % (9 - 0 + 1) + 0, posicionAleatoriaColumna = rand() % (9 - 0 + 1) + 0, direccionAleatoria = rand() % (4 - 1 + 1) + 1;
+			int posicionAleatoriaFila = rand() % filas, posicionAleatoriaColumna = rand() % columnas, direccionAleatoria = rand() % (4 - 1 + 1) + 1;
 
 			// Primereo nos aseguramos de que esa posición original no esté ocupada por otro barco, en caso de que lo esté no hacemos nada y como barcoBienPuesto es false, se repetirá el bucle.
 			if (tableroJugador1[posicionAleatoriaFila][posicionAleatoriaColumna] == '~')
 			{
 				// Aquí escribimos lo que pasará en cada caso de dirección aleatoria.
 
-				// Para este caso en el que la direccion es derecha, recorremos aquellas posiciones con la misma fila pero incrementando la columna tantas veces como el tamaño del barco sea.
-				if (direccionAleatoria == 1)
+				// Para este caso en el que la direccion es derecha, recorremos aquellas posiciones con la misma fila pero incrementando la columna tantas veces como el tamaño del barco sea y comprobamos que no se pase del tamaño de la matriz (i es el tamaño del barco).
+				if (direccionAleatoria == 1 && posicionAleatoriaColumna + (i - 1) <= 9)
 				{
-					// Comprobamos que no se pase del tamaño de la matriz (i es el tamaño del barco).
-					if (posicionAleatoriaColumna + i <= 9)
+					// Primero nos aseguramos de que el barco no estará superpuesto y en caso de que lo esté salimos del bucle para encontrar otra posición.
+					for (int j = 0; j < i; j++)
 					{
-						// Primero nos aseguramos de que el barco no estará superpuesto y en caso de que lo esté salimos del bucle para encontrar otra posición.
+						if (tableroJugador1[posicionAleatoriaFila][posicionAleatoriaColumna + j] != '~')
+						{
+							superpuesto = true;
+							break;
+						}
+					}
+
+					// Si no está superpuesto, entonces colocamos el barco.
+					if (!superpuesto)
+					{
 						for (int j = 0; j < i; j++)
 						{
 							if (tableroJugador1[posicionAleatoriaFila][posicionAleatoriaColumna + j] != '~')
 							{
-								superpuesto = true;
-								break;
+								tableroJugador1[posicionAleatoriaFila][posicionAleatoriaColumna + j] = tamanyoBarco;
 							}
 						}
 
-						// Si no está superpuesto, entonces colocamos el barco.
-						if (!superpuesto)
-						{
-							for (int j = 0; j < i; j++)
-							{
-								if (tableroJugador1[posicionAleatoriaFila][posicionAleatoriaColumna + j] != '~')
-								{
-									tableroJugador1[posicionAleatoriaFila][posicionAleatoriaColumna + j] = tamanyoBarco;
-								}
-							}
-
-							// Declaramos que el barco ha sido bien puesto y que podemos pasar al siguiente.
-							barcoBienPuesto = true;
-						}
+						// Declaramos que el barco ha sido bien puesto y que podemos pasar al siguiente.
+						barcoBienPuesto = true;
 					}
 				}
-				// Para este caso en el que la direccion es arriba, recorremos aquellas posiciones con la misma columna pero decrementando la fila tantas veces como el tamaño del barco sea.
-				else if (direccionAleatoria == 2)
+				// Para este caso en el que la direccion es arriba, recorremos aquellas posiciones con la misma columna pero decrementando la fila tantas veces como el tamaño del barco sea y comprobamos que no se pase del tamaño de la matriz (i es el tamaño del barco).
+				else if (direccionAleatoria == 2 && posicionAleatoriaFila - (i - 1) >= 0)
 				{
-					// Comprobamos que no se pase del tamaño de la matriz (i es el tamaño del barco).
-					if (posicionAleatoriaFila - i >= 0)
+					// Primero nos aseguramos de que el barco no estará superpuesto y en caso de que lo esté salimos del bucle para encontrar otra posición.
+					for (int j = 0; j < i; j++)
 					{
-						// Primero nos aseguramos de que el barco no estará superpuesto y en caso de que lo esté salimos del bucle para encontrar otra posición.
-						for (int j = 0; j < i; j++)
+						if (tableroJugador1[posicionAleatoriaFila - j][posicionAleatoriaColumna] != '~')
 						{
-							if (tableroJugador1[posicionAleatoriaFila - j][posicionAleatoriaColumna] != '~')
-							{
-								superpuesto = true;
-								break;
-							}
-						}
-
-						// Si no está superpuesto, entonces colocamos el barco.
-						if (!superpuesto)
-						{
-							for (int j = 0; j < i; j++)
-							{
-								tableroJugador1[posicionAleatoriaFila - j][posicionAleatoriaColumna] = tamanyoBarco;
-							}
-
-							// Declaramos que el barco ha sido bien puesto y que podemos pasar al siguiente.
-							barcoBienPuesto = true;
+							superpuesto = true;
+							break;
 						}
 					}
-				}
-				// Para este caso en el que la direccion es izquierda, recorremos aquellas posiciones con la misma fila pero decrementando la columna tantas veces como el tamaño del barco sea.
-				else if (direccionAleatoria == 3)
-				{
-					// Comprobamos que no se pase del tamaño de la matriz (i es el tamaño del barco).
-					if (posicionAleatoriaColumna - i >= 0)
+
+					// Si no está superpuesto, entonces colocamos el barco.
+					if (!superpuesto)
 					{
-						// Primero nos aseguramos de que el barco no estará superpuesto y en caso de que lo esté salimos del bucle para encontrar otra posición.
 						for (int j = 0; j < i; j++)
 						{
-							if (tableroJugador1[posicionAleatoriaFila][posicionAleatoriaColumna - j] != '~')
-							{
-								superpuesto = true;
-								break;
-							}
+							tableroJugador1[posicionAleatoriaFila - j][posicionAleatoriaColumna] = tamanyoBarco;
 						}
 
-						// Si no está superpuesto, entonces colocamos el barco.
-						if (!superpuesto)
-						{
-							for (int j = 0; j < i; j++)
-							{
-								tableroJugador1[posicionAleatoriaFila][posicionAleatoriaColumna - j] = tamanyoBarco;
-							}
-
-							// Declaramos que el barco ha sido bien puesto y que podemos pasar al siguiente.
-							barcoBienPuesto = true;
-						}
+						// Declaramos que el barco ha sido bien puesto y que podemos pasar al siguiente.
+						barcoBienPuesto = true;
 					}
 				}
-				// Para este caso en el que la direccion es abajo, recorremos aquellas posiciones con la misma columna pero incrementando la fila tantas veces como el tamaño del barco sea.
-				else
+				// Para este caso en el que la direccion es izquierda, recorremos aquellas posiciones con la misma fila pero decrementando la columna tantas veces como el tamaño del barco sea y comprobamos que no se pase del tamaño de la matriz (i es el tamaño del barco).
+				else if (direccionAleatoria == 3 && posicionAleatoriaColumna - (i - 1) >= 0)
 				{
-					// Comprobamos que no se pase del tamaño de la matriz (i es el tamaño del barco).
-					if (posicionAleatoriaFila + i <= 9)
+					// Primero nos aseguramos de que el barco no estará superpuesto y en caso de que lo esté salimos del bucle para encontrar otra posición.
+					for (int j = 0; j < i; j++)
 					{
-						// Primero nos aseguramos de que el barco no estará superpuesto y en caso de que lo esté salimos del bucle para encontrar otra posición.
+						if (tableroJugador1[posicionAleatoriaFila][posicionAleatoriaColumna - j] != '~')
+						{
+							superpuesto = true;
+							break;
+						}
+					}
+
+					// Si no está superpuesto, entonces colocamos el barco.
+					if (!superpuesto)
+					{
 						for (int j = 0; j < i; j++)
 						{
-							if (tableroJugador1[posicionAleatoriaFila + j][posicionAleatoriaColumna] != '~')
-							{
-								superpuesto = true;
-								break;
-							}
+							tableroJugador1[posicionAleatoriaFila][posicionAleatoriaColumna - j] = tamanyoBarco;
 						}
 
-						// Si no está superpuesto, entonces colocamos el barco.
-						if (!superpuesto)
+						// Declaramos que el barco ha sido bien puesto y que podemos pasar al siguiente.
+						barcoBienPuesto = true;
+					}
+				}
+				// Para este caso en el que la direccion es abajo, recorremos aquellas posiciones con la misma columna pero incrementando la fila tantas veces como el tamaño del barco sea y comprobamos que no se pase del tamaño de la matriz (i es el tamaño del barco).
+				else if (direccionAleatoria == 4 && posicionAleatoriaFila + (i - 1) <= 9)
+				{
+					// Primero nos aseguramos de que el barco no estará superpuesto y en caso de que lo esté salimos del bucle para encontrar otra posición.
+					for (int j = 0; j < i; j++)
+					{
+						if (tableroJugador1[posicionAleatoriaFila + j][posicionAleatoriaColumna] != '~')
 						{
-							for (int j = 0; j < i; j++)
-							{
-								tableroJugador1[posicionAleatoriaFila + j][posicionAleatoriaColumna] = tamanyoBarco;
-							}
-
-							// Declaramos que el barco ha sido bien puesto y que podemos pasar al siguiente.
-							barcoBienPuesto = true;
+							superpuesto = true;
+							break;
 						}
+					}
+
+					// Si no está superpuesto, entonces colocamos el barco.
+					if (!superpuesto)
+					{
+						for (int j = 0; j < i; j++)
+						{
+							tableroJugador1[posicionAleatoriaFila + j][posicionAleatoriaColumna] = tamanyoBarco;
+						}
+
+						// Declaramos que el barco ha sido bien puesto y que podemos pasar al siguiente.
+						barcoBienPuesto = true;
 					}
 				}
 			}
@@ -218,7 +202,7 @@ int main() {
 	for (int i = 3; i < numeroBarcos + 1; i++)
 	{
 		// Convertimos i (que es el tamaño del barco) en un char con su mismo valor para poder almacenarlo en nuestros tableros.
-		char tamanyoBarco = i + '0';
+		char tamanyoBarco = i + '0'; // La IA me ha dicho varias maneras de converir una variable int en char y he eelegido esta.
 
 		// Booleano para saber cuando un barco esta bien puesto y se puede pasar al siguiente.
 		bool barcoBienPuesto = false;
@@ -237,123 +221,107 @@ int main() {
 			{
 				// Aquí escribimos lo que pasará en cada caso de dirección aleatoria.
 
-				// Para este caso en el que la direccion es derecha, recorremos aquellas posiciones con la misma fila pero incrementando la columna tantas veces como el tamaño del barco sea.
-				if (direccionAleatoria == 1)
+				// Para este caso en el que la direccion es derecha, recorremos aquellas posiciones con la misma fila pero incrementando la columna tantas veces como el tamaño del barco sea y comprobamos que no se pase del tamaño de la matriz (i es el tamaño del barco).
+				if (direccionAleatoria == 1 && posicionAleatoriaColumna + (i - 1) <= 9)
 				{
-					// Comprobamos que no se pase del tamaño de la matriz (i es el tamaño del barco).
-					if (posicionAleatoriaColumna + i <= 9)
+					// Primero nos aseguramos de que el barco no estará superpuesto y en caso de que lo esté salimos del bucle para encontrar otra posición.
+					for (int j = 0; j < i; j++)
 					{
-						// Primero nos aseguramos de que el barco no estará superpuesto y en caso de que lo esté salimos del bucle para encontrar otra posición.
+						if (tableroJugador2[posicionAleatoriaFila][posicionAleatoriaColumna + j] != '~')
+						{
+							superpuesto = true;
+							break;
+						}
+					}
+
+					// Si no está superpuesto, entonces colocamos el barco.
+					if (!superpuesto)
+					{
 						for (int j = 0; j < i; j++)
 						{
 							if (tableroJugador2[posicionAleatoriaFila][posicionAleatoriaColumna + j] != '~')
 							{
-								superpuesto = true;
-								break;
+								tableroJugador2[posicionAleatoriaFila][posicionAleatoriaColumna + j] = tamanyoBarco;
 							}
 						}
 
-						// Si no está superpuesto, entonces colocamos el barco.
-						if (!superpuesto)
-						{
-							for (int j = 0; j < i; j++)
-							{
-								if (tableroJugador2[posicionAleatoriaFila][posicionAleatoriaColumna + j] != '~')
-								{
-									tableroJugador2[posicionAleatoriaFila][posicionAleatoriaColumna + j] = tamanyoBarco;
-								}
-							}
-
-							// Declaramos que el barco ha sido bien puesto y que podemos pasar al siguiente.
-							barcoBienPuesto = true;
-						}
+						// Declaramos que el barco ha sido bien puesto y que podemos pasar al siguiente.
+						barcoBienPuesto = true;
 					}
 				}
-				// Para este caso en el que la direccion es arriba, recorremos aquellas posiciones con la misma columna pero decrementando la fila tantas veces como el tamaño del barco sea.
-				else if (direccionAleatoria == 2)
+				// Para este caso en el que la direccion es arriba, recorremos aquellas posiciones con la misma columna pero decrementando la fila tantas veces como el tamaño del barco sea y comprobamos que no se pase del tamaño de la matriz (i es el tamaño del barco).
+				else if (direccionAleatoria == 2 && posicionAleatoriaFila - (i - 1) >= 0)
 				{
-					// Comprobamos que no se pase del tamaño de la matriz (i es el tamaño del barco).
-					if (posicionAleatoriaFila - i >= 0)
+					// Primero nos aseguramos de que el barco no estará superpuesto y en caso de que lo esté salimos del bucle para encontrar otra posición.
+					for (int j = 0; j < i; j++)
 					{
-						// Primero nos aseguramos de que el barco no estará superpuesto y en caso de que lo esté salimos del bucle para encontrar otra posición.
-						for (int j = 0; j < i; j++)
+						if (tableroJugador2[posicionAleatoriaFila - j][posicionAleatoriaColumna] != '~')
 						{
-							if (tableroJugador2[posicionAleatoriaFila - j][posicionAleatoriaColumna] != '~')
-							{
-								superpuesto = true;
-								break;
-							}
-						}
-
-						// Si no está superpuesto, entonces colocamos el barco.
-						if (!superpuesto)
-						{
-							for (int j = 0; j < i; j++)
-							{
-								tableroJugador2[posicionAleatoriaFila - j][posicionAleatoriaColumna] = tamanyoBarco;
-							}
-
-							// Declaramos que el barco ha sido bien puesto y que podemos pasar al siguiente.
-							barcoBienPuesto = true;
+							superpuesto = true;
+							break;
 						}
 					}
-				}
-				// Para este caso en el que la direccion es izquierda, recorremos aquellas posiciones con la misma fila pero decrementando la columna tantas veces como el tamaño del barco sea.
-				else if (direccionAleatoria == 3)
-				{
-					// Comprobamos que no se pase del tamaño de la matriz (i es el tamaño del barco).
-					if (posicionAleatoriaColumna - i >= 0)
+
+					// Si no está superpuesto, entonces colocamos el barco.
+					if (!superpuesto)
 					{
-						// Primero nos aseguramos de que el barco no estará superpuesto y en caso de que lo esté salimos del bucle para encontrar otra posición.
 						for (int j = 0; j < i; j++)
 						{
-							if (tableroJugador2[posicionAleatoriaFila][posicionAleatoriaColumna - j] != '~')
-							{
-								superpuesto = true;
-								break;
-							}
+							tableroJugador2[posicionAleatoriaFila - j][posicionAleatoriaColumna] = tamanyoBarco;
 						}
 
-						// Si no está superpuesto, entonces colocamos el barco.
-						if (!superpuesto)
-						{
-							for (int j = 0; j < i; j++)
-							{
-								tableroJugador2[posicionAleatoriaFila][posicionAleatoriaColumna - j] = tamanyoBarco;
-							}
-
-							// Declaramos que el barco ha sido bien puesto y que podemos pasar al siguiente.
-							barcoBienPuesto = true;
-						}
+						// Declaramos que el barco ha sido bien puesto y que podemos pasar al siguiente.
+						barcoBienPuesto = true;
 					}
 				}
-				// Para este caso en el que la direccion es abajo, recorremos aquellas posiciones con la misma columna pero incrementando la fila tantas veces como el tamaño del barco sea.
-				else
+				// Para este caso en el que la direccion es izquierda, recorremos aquellas posiciones con la misma fila pero decrementando la columna tantas veces como el tamaño del barco sea y comprobamos que no se pase del tamaño de la matriz (i es el tamaño del barco).
+				else if (direccionAleatoria == 3 && posicionAleatoriaColumna - (i - 1) >= 0)
 				{
-					// Comprobamos que no se pase del tamaño de la matriz (i es el tamaño del barco).
-					if (posicionAleatoriaFila + i <= 9)
+					// Primero nos aseguramos de que el barco no estará superpuesto y en caso de que lo esté salimos del bucle para encontrar otra posición.
+					for (int j = 0; j < i; j++)
 					{
-						// Primero nos aseguramos de que el barco no estará superpuesto y en caso de que lo esté salimos del bucle para encontrar otra posición.
+						if (tableroJugador2[posicionAleatoriaFila][posicionAleatoriaColumna - j] != '~')
+						{
+							superpuesto = true;
+							break;
+						}
+					}
+
+					// Si no está superpuesto, entonces colocamos el barco.
+					if (!superpuesto)
+					{
 						for (int j = 0; j < i; j++)
 						{
-							if (tableroJugador2[posicionAleatoriaFila + j][posicionAleatoriaColumna] != '~')
-							{
-								superpuesto = true;
-								break;
-							}
+							tableroJugador2[posicionAleatoriaFila][posicionAleatoriaColumna - j] = tamanyoBarco;
 						}
 
-						// Si no está superpuesto, entonces colocamos el barco.
-						if (!superpuesto)
+						// Declaramos que el barco ha sido bien puesto y que podemos pasar al siguiente.
+						barcoBienPuesto = true;
+					}
+				}
+				// Para este caso en el que la direccion es abajo, recorremos aquellas posiciones con la misma columna pero incrementando la fila tantas veces como el tamaño del barco sea y comprobamos que no se pase del tamaño de la matriz (i es el tamaño del barco).
+				else if (direccionAleatoria == 4 && posicionAleatoriaFila + (i - 1) <= 9)
+				{
+					// Primero nos aseguramos de que el barco no estará superpuesto y en caso de que lo esté salimos del bucle para encontrar otra posición.
+					for (int j = 0; j < i; j++)
+					{
+						if (tableroJugador2[posicionAleatoriaFila + j][posicionAleatoriaColumna] != '~')
 						{
-							for (int j = 0; j < i; j++)
-							{
-								tableroJugador2[posicionAleatoriaFila + j][posicionAleatoriaColumna] = tamanyoBarco;
-							}
-
-							// Declaramos que el barco ha sido bien puesto y que podemos pasar al siguiente.
-							barcoBienPuesto = true;
+							superpuesto = true;
+							break;
 						}
+					}
+
+					// Si no está superpuesto, entonces colocamos el barco.
+					if (!superpuesto)
+					{
+						for (int j = 0; j < i; j++)
+						{
+							tableroJugador2[posicionAleatoriaFila + j][posicionAleatoriaColumna] = tamanyoBarco;
+						}
+
+						// Declaramos que el barco ha sido bien puesto y que podemos pasar al siguiente.
+						barcoBienPuesto = true;
 					}
 				}
 			}
