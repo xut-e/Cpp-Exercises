@@ -20,6 +20,7 @@ int main() {
 	int const filas = 10, columnas = 10, numeroBarcos = 6;
 	char tableroJugador1[filas][columnas], tableroJugador2[filas][columnas], tableroGameplayJugador1[filas][columnas], tableroGameplayJugador2[filas][columnas];
 	bool barcosHundidosJugador1 = 0, barcosHundidosJugador2 = 0;
+	int fila, columna;
 	srand(time(0));
 
 #pragma region tableros
@@ -327,7 +328,7 @@ int main() {
 
 #pragma endregion
 
-	// Imprimimos el tablero de ambos jugadores.
+	// Imprimimos los dos tableros.
 	std::cout << "TABLERO JUGADOR 1:" << std::endl;
 
 	for (int i = 0; i < filas; i++)
@@ -354,6 +355,11 @@ int main() {
 		std::cout << std::endl;
 	}
 
+	std::cout << std::endl << "Presiona cualquier tecla para empezar a jugar: ";
+	std::cin.get(); // Detectamos cualquier tecla. Esta parte me la dijo la IA.
+
+#pragma region gameplay
+
 	while (barcosHundidosJugador1 <= 4 || barcosHundidosJugador2 <= 4)
 	{
 		// Limpiamos la pantalla. Esta parte me la dijo la IA.
@@ -362,8 +368,66 @@ int main() {
 		// Indicamos a los jugadores de quién es el turno.
 		std::cout << "TURNO JUGADOR 1:" << std::endl;
 
+		//Imprimimos el tablero del jugador contrario para que el jugador actual pueda visualizar mejor la posición a atacar.
+		std::cout << "TABLERO DEL JUGADOR 2:" << std::endl;
 
+		for (int i = 0; i < filas; i++)
+		{
+			for (int j = 0; j < columnas; j++)
+			{
+				std::cout << " " << tableroGameplayJugador2[i][j];
+
+			}
+			std::cout << std::endl;
+		}
+
+		std::cout << std::endl;
+		do
+		{
+			do
+			{
+				std::cout << "Introduzca la posición de fila que desea atacar: ";
+				std::cin >> fila;
+				fila--;
+
+				if (fila > 9 || fila < 0)
+				{
+					std::cout << "Esa posición no es válida, debe de estar entre 1 y 10." << std::endl << std::endl;
+				}
+
+			} while (fila > 9 || fila < 0);
+
+			do
+			{
+				std::cout << "Introduzca la posición de columna que desea atacar: ";
+				std::cin >> columna;
+				columna--;
+
+				if (columna > 9 || columna < 0)
+				{
+					std::cout << "Esa posición no es válida, debe de estar entre 1 y 10." << std::endl << std::endl;
+				}
+
+			} while (columna > 9 || columna < 0);
+
+			if (tableroGameplayJugador2[fila][columna] != '~')
+			{
+				std::cout << "Esa posición ya ha sido atacada." << std::endl;
+			}
+
+		} while (tableroGameplayJugador2[fila][columna] != '~');
+		
+		if (tableroJugador2[fila][columna] == '~')
+		{
+			tableroGameplayJugador2[fila][columna] = 'X';
+		}
+		else
+		{
+			tableroGameplayJugador2[fila][columna] = 'O';
+		}
 	}
+
+#pragma endregion
 
 	return 0;
 }
