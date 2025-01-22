@@ -32,8 +32,8 @@ int main() {
 		{
 			tableroJugador1[i][j] = '~';
 			tableroJugador2[i][j] = '~';
-			tableroGameplayJugador1[filas][columnas] = '~';
-			tableroGameplayJugador2[filas][columnas] = '~';
+			tableroGameplayJugador1[i][j] = '~';
+			tableroGameplayJugador2[i][j] = '~';
 		}
 	}
 
@@ -386,33 +386,33 @@ int main() {
 		{
 			do
 			{
-				std::cout << "Introduzca la posición de fila que desea atacar: ";
+				std::cout << "Introduzca la posicion de fila que desea atacar: ";
 				std::cin >> fila;
 				fila--;
 
 				if (fila > 9 || fila < 0)
 				{
-					std::cout << "Esa posición no es válida, debe de estar entre 1 y 10." << std::endl << std::endl;
+					std::cout << "Esa posicion no es valida, debe de estar entre 1 y 10." << std::endl << std::endl;
 				}
 
 			} while (fila > 9 || fila < 0);
 
 			do
 			{
-				std::cout << "Introduzca la posición de columna que desea atacar: ";
+				std::cout << "Introduzca la posicion de columna que desea atacar: ";
 				std::cin >> columna;
 				columna--;
 
 				if (columna > 9 || columna < 0)
 				{
-					std::cout << "Esa posición no es válida, debe de estar entre 1 y 10." << std::endl << std::endl;
+					std::cout << "Esa posicion no es valida, debe de estar entre 1 y 10." << std::endl << std::endl;
 				}
 
 			} while (columna > 9 || columna < 0);
 
 			if (tableroGameplayJugador2[fila][columna] != '~')
 			{
-				std::cout << "Esa posición ya ha sido atacada." << std::endl;
+				std::cout << "Esa posicion ya ha sido atacada." << std::endl;
 			}
 
 		} while (tableroGameplayJugador2[fila][columna] != '~');
