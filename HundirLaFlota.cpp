@@ -18,7 +18,8 @@
 
 int main() {
 	int const filas = 10, columnas = 10, numeroBarcos = 6;
-	char tableroJugador1[filas][columnas], tableroJugador2[filas][columnas];
+	char tableroJugador1[filas][columnas], tableroJugador2[filas][columnas], tableroGameplayJugador1[filas][columnas], tableroGameplayJugador2[filas][columnas];
+	bool barcosHundidosJugador1 = 0, barcosHundidosJugador2 = 0;
 	srand(time(0));
 
 #pragma region tableros
@@ -30,6 +31,8 @@ int main() {
 		{
 			tableroJugador1[i][j] = '~';
 			tableroJugador2[i][j] = '~';
+			tableroGameplayJugador1[filas][columnas] = '~';
+			tableroGameplayJugador2[filas][columnas] = '~';
 		}
 	}
 
@@ -324,6 +327,7 @@ int main() {
 
 #pragma endregion
 
+	// Imprimimos el tablero de ambos jugadores.
 	std::cout << "TABLERO JUGADOR 1:" << std::endl;
 
 	for (int i = 0; i < filas; i++)
@@ -349,4 +353,17 @@ int main() {
 		}
 		std::cout << std::endl;
 	}
+
+	while (barcosHundidosJugador1 <= 4 || barcosHundidosJugador2 <= 4)
+	{
+		// Limpiamos la pantalla. Esta parte me la dijo la IA.
+		system("cls");
+
+		// Indicamos a los jugadores de quién es el turno.
+		std::cout << "TURNO JUGADOR 1:" << std::endl;
+
+
+	}
+
+	return 0;
 }
