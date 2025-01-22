@@ -62,6 +62,9 @@ int main() {
 
 #pragma endregion
 
+	std::cout << std::endl << "Presiona cualquier tecla para colocar los barcos: ";
+	std::cin.get(); // Detectamos cualquier tecla. Esta parte me la dijo la IA.
+
 #pragma region barcosJugador1
 
 	// Con este bucle iteramos entre los tamaños del barco.
