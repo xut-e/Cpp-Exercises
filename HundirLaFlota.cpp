@@ -10,16 +10,48 @@
  ● El tablero será de 10x10 y mostrará sus casillas mediante el símbolo ~.
  ● El tablero puede visualizarse mediante la consola de comandos.
 
+ Barcos (3 puntos)
+ Tras generar el tablero el programa colocara aleatoriamente los barcos en el
+ tablero de cada jugador.
+ ● Cadajugador dispondrá de un barco de 3, 4, 5 y 6 espacios.
+ ● Dosbarcos no pueden coincidir en una casilla.
+ ● Losbarcos sólo pueden colocarse verticalmente u horizontalmente.
+ ● Unbarco no puede salir de los límites del mapa.
+ ● Losbarcos serán colocados aleatoriamente en el tablero.
+ ● Sólo al inicio del primer turno se mostrarán los barcos de ambos jugadores
+ para poder debugar correctamente.
+
+ Gameplay (3 puntos)
+ En cada turno el programa pedirá al usuario que introduzca fila y columna
+ que quiere atacar. Tras ello actualiza el tablero con el resultado. Gana aquel
+ jugador que hunda primero todos los barcos rivales.
+ ● Losturnos se intercalan correctamente y cada jugador ataca al tablero rival.
+ ● Tras cada turno se visualiza actualizado el tablero de ambos jugadores.
+ ● El tablero muestra los fallos (X) y los aciertos (O).
+ ● El juego finaliza indicando el jugador vencedor.
+ ● Encadaturno se solicitará al jugador correspondiente fila y columna a
+ atacar siendo la 1, 1 la casilla superior izquierda y la 10, 10 la inferior
+ derecha.
+
+ Code Review (2 puntos)
+ Se aplican y presentan buenas prácticas de programación.
+ ● Usocorrecto del tipo de variables.
+ ● Constancia en la nomenclatura de variables.
+ ● Código comentado.
+ ● Sinuso de magic numbers.
+ ● Sinvariables sin uso.
+ ● Sinpresentar graves errores de rendimiento.
 
   */
 
 #include <iostream>
 #include <time.h>
+#include <Windows.h>
 
 int main() {
 	int const filas = 10, columnas = 10, numeroBarcos = 6;
 	char tableroJugador1[filas][columnas], tableroJugador2[filas][columnas], tableroGameplayJugador1[filas][columnas], tableroGameplayJugador2[filas][columnas];
-	bool barcosHundidosJugador1 = 0, barcosHundidosJugador2 = 0;
+	int cantidadOsJugador1 = 0, cantidadOsJugador2 = 0;
 	int fila, columna;
 	srand(time(0));
 
@@ -328,6 +360,8 @@ int main() {
 
 #pragma endregion
 
+	system("cls");
+
 	// Imprimimos los dos tableros.
 	std::cout << "TABLERO JUGADOR 1:" << std::endl;
 
@@ -358,9 +392,11 @@ int main() {
 	std::cout << std::endl << "Presiona cualquier tecla para empezar a jugar: ";
 	std::cin.get(); // Detectamos cualquier tecla. Esta parte me la dijo la IA.
 
+	std::cin.ignore(); // Limpiamos la entrada para que no se vuelva a activar sola.
+
 #pragma region gameplay
 
-	while (barcosHundidosJugador1 <= 4 || barcosHundidosJugador2 <= 4)
+	while (cantidadOsJugador1 < 18 && cantidadOsJugador2 < 18)
 	{
 		// Limpiamos la pantalla. Esta parte me la dijo la IA.
 		system("cls");
@@ -382,6 +418,7 @@ int main() {
 		}
 
 		std::cout << std::endl;
+
 		do
 		{
 			do
@@ -424,7 +461,165 @@ int main() {
 		else
 		{
 			tableroGameplayJugador2[fila][columna] = 'O';
+			cantidadOsJugador1++;
+
+			if (cantidadOsJugador1 == 18)
+			{
+				break;
+			}
 		}
+
+		// Limpiamos la pantalla. Esta parte me la dijo la IA.
+		system("cls");
+
+		// Indicamos a los jugadores de quién es el turno.
+		std::cout << "TURNO JUGADOR 1:" << std::endl;
+
+		//Imprimimos el tablero del jugador contrario para que el jugador actual pueda visualizar mejor la posición a atacar.
+		std::cout << "TABLERO DEL JUGADOR 2:" << std::endl;
+
+		for (int i = 0; i < filas; i++)
+		{
+			for (int j = 0; j < columnas; j++)
+			{
+				std::cout << " " << tableroGameplayJugador2[i][j];
+
+			}
+			std::cout << std::endl;
+		}
+
+		Sleep(1500);
+
+		// Limpiamos la pantalla. Esta parte me la dijo la IA.
+		system("cls");
+
+		// Indicamos a los jugadores de quién es el turno.
+		std::cout << "TURNO JUGADOR 2:" << std::endl;
+
+		//Imprimimos el tablero del jugador contrario para que el jugador actual pueda visualizar mejor la posición a atacar.
+		std::cout << "TABLERO DEL JUGADOR 1:" << std::endl;
+
+		for (int i = 0; i < filas; i++)
+		{
+			for (int j = 0; j < columnas; j++)
+			{
+				std::cout << " " << tableroGameplayJugador1[i][j];
+
+			}
+			std::cout << std::endl;
+		}
+
+		std::cout << std::endl;
+
+		do
+		{
+			do
+			{
+				std::cout << "Introduzca la posicion de fila que desea atacar: ";
+				std::cin >> fila;
+				fila--;
+
+				if (fila > 9 || fila < 0)
+				{
+					std::cout << "Esa posicion no es valida, debe de estar entre 1 y 10." << std::endl << std::endl;
+				}
+
+			} while (fila > 9 || fila < 0);
+
+			do
+			{
+				std::cout << "Introduzca la posicion de columna que desea atacar: ";
+				std::cin >> columna;
+				columna--;
+
+				if (columna > 9 || columna < 0)
+				{
+					std::cout << "Esa posicion no es valida, debe de estar entre 1 y 10." << std::endl << std::endl;
+				}
+
+			} while (columna > 9 || columna < 0);
+
+			if (tableroGameplayJugador1[fila][columna] != '~')
+			{
+				std::cout << "Esa posicion ya ha sido atacada." << std::endl;
+			}
+
+		} while (tableroGameplayJugador1[fila][columna] != '~');
+
+		if (tableroJugador1[fila][columna] == '~')
+		{
+			tableroGameplayJugador1[fila][columna] = 'X';
+		}
+		else
+		{
+			tableroGameplayJugador1[fila][columna] = 'O';
+			cantidadOsJugador2++;
+
+			if (cantidadOsJugador2 == 18)
+			{
+				break;
+			}
+		}
+
+		// Limpiamos la pantalla. Esta parte me la dijo la IA.
+		system("cls");
+
+		// Indicamos a los jugadores de quién es el turno.
+		std::cout << "TURNO JUGADOR 2:" << std::endl;
+
+		//Imprimimos el tablero del jugador contrario para que el jugador actual pueda visualizar mejor la posición a atacar.
+		std::cout << "TABLERO DEL JUGADOR 1:" << std::endl;
+
+		for (int i = 0; i < filas; i++)
+		{
+			for (int j = 0; j < columnas; j++)
+			{
+				std::cout << " " << tableroGameplayJugador1[i][j];
+
+			}
+			std::cout << std::endl;
+		}
+
+		Sleep(1500);
+	}
+
+	if (cantidadOsJugador1 >= 18)
+	{
+		//Imprimimos el tablero del jugador contrario para que el jugador actual pueda visualizar mejor la posición a atacar.
+		std::cout << "TABLERO DEL JUGADOR 2:" << std::endl;
+
+		for (int i = 0; i < filas; i++)
+		{
+			for (int j = 0; j < columnas; j++)
+			{
+				std::cout << " " << tableroGameplayJugador2[i][j];
+
+			}
+			std::cout << std::endl;
+		}
+
+		std::cout << std::endl;
+
+		std::cout << "El jugador 1 gana! Enhorabuena, has hundido la flota de tu rival." << std::endl;
+	}
+	else if (cantidadOsJugador2 >= 18)
+	{
+		//Imprimimos el tablero del jugador contrario para que el jugador actual pueda visualizar mejor la posición a atacar.
+		std::cout << "TABLERO DEL JUGADOR 1:" << std::endl;
+
+		for (int i = 0; i < filas; i++)
+		{
+			for (int j = 0; j < columnas; j++)
+			{
+				std::cout << " " << tableroGameplayJugador1[i][j];
+
+			}
+			std::cout << std::endl;
+		}
+
+		std::cout << std::endl;
+
+		std::cout << "El jugador 2 gana! Enhorabuena, has hundido la flota de tu rival." << std::endl;
 	}
 
 #pragma endregion
