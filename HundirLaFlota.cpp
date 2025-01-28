@@ -48,19 +48,28 @@
 #include <time.h>
 #include <Windows.h>
 
+#define FILAS 10
+#define COLUMNAS 10
+
 int main() {
-	int const filas = 10, columnas = 10, numeroBarcos = 6;
-	char tableroJugador1[filas][columnas], tableroJugador2[filas][columnas], tableroGameplayJugador1[filas][columnas], tableroGameplayJugador2[filas][columnas];
+	int const numeroBarcos = 6;
+	char tableroJugador1[FILAS][COLUMNAS], tableroJugador2[FILAS][COLUMNAS], tableroGameplayJugador1[FILAS][COLUMNAS], tableroGameplayJugador2[FILAS][COLUMNAS];
 	int cantidadOsJugador1 = 0, cantidadOsJugador2 = 0;
-	int fila, columna;
+	int fila, columna, cantidadOsTotal = 0, contadorTurno = 0;;
 	srand(time(0));
+
+	// Definimos cuál es la cantidad total de Os para ganar.
+	for (int i = 3; i < numeroBarcos + 1; i++)
+	{
+		cantidadOsTotal += i;
+	}
 
 #pragma region tableros
 
 	// Inicializo los dos tableros.
-	for (int i = 0; i < filas; i++)
+	for (int i = 0; i < FILAS; i++)
 	{
-		for (int j = 0; j < columnas; j++)
+		for (int j = 0; j < COLUMNAS; j++)
 		{
 			tableroJugador1[i][j] = '~';
 			tableroJugador2[i][j] = '~';
@@ -72,9 +81,9 @@ int main() {
 	// Imprimo ambos tableros para previsualizarlos.
 	std::cout << "TABLERO JUGADOR 1:" << std::endl;
 
-	for (int i = 0; i < filas; i++)
+	for (int i = 0; i < FILAS; i++)
 	{
-		for (int j = 0; j < columnas; j++)
+		for (int j = 0; j < COLUMNAS; j++)
 		{
 			std::cout << " " << tableroJugador1[i][j];
 
@@ -86,9 +95,9 @@ int main() {
 
 	std::cout << "TABLERO JUGADOR 2:" << std::endl;
 
-	for (int i = 0; i < filas; i++)
+	for (int i = 0; i < FILAS; i++)
 	{
-		for (int j = 0; j < columnas; j++)
+		for (int j = 0; j < COLUMNAS; j++)
 		{
 			std::cout << " " << tableroJugador2[i][j];
 
@@ -98,10 +107,12 @@ int main() {
 
 #pragma endregion
 
-	std::cout << std::endl << "Presiona cualquier tecla para colocar los barcos: ";
-	std::cin.get(); // Detectamos cualquier tecla. Esta parte me la dijo la IA.
+	std::cout << std::endl;
 
-#pragma region barcosJugador1
+	// Detenemos la ejecución del programa hasta que se presione una tecla
+	system("pause");
+
+#pragma region barcosJugadores
 
 	// Con este bucle iteramos entre los tamaños del barco.
 	for (int i = 3; i <= 6; i++)
@@ -115,8 +126,8 @@ int main() {
 		// En caso de que un barco haya sido colocado, salimos del bucle y aumentamos una iteración el for anterior para pasar al siguiente tamaño de barco.
 		while (!barcoColocado)
 		{
-			// Generamos una posicion aleatoria del 0 al 9 (tamaño del tablero) para filas y columnas que se regenera en caso de que no haya sido posible colocar un barco desde la posicion aleatoria en ninguna posición.
-			int posicionAleatoriaFila = rand() % filas, posicionAleatoriaColumna = rand() % columnas;
+			// Generamos una posicion aleatoria del 0 al 9 (tamaño del tablero) para FILAS y COLUMNAS que se regenera en caso de que no haya sido posible colocar un barco desde la posicion aleatoria en ninguna posición.
+			int posicionAleatoriaFila = rand() % FILAS, posicionAleatoriaColumna = rand() % COLUMNAS;
 
 			// Bucle para iterar entre las posiciones posibles (como en un cuadrante [1: Derecha, 2: Arriba, 3: Izquierda, 4: Abajo]).
 			for (int j = 1; j <= 4; j++)
@@ -128,7 +139,7 @@ int main() {
 				if (tableroJugador1[posicionAleatoriaFila][posicionAleatoriaColumna] == '~')
 				{
 					// Para la direccion 1 (derecha) y además comprobamos si el barco queda dentro del tablero e inicia el for.
-					if (j == 1 && posicionAleatoriaColumna + i <= 9)
+					if (j == 1 && posicionAleatoriaColumna + i < COLUMNAS)
 					{
 						// Con este bucle iteramos entre las posiciones que ocupará el barco. Sumamos k en la columna porque la dirección es derecha.
 						for (int k = 0; k < i; k++)
@@ -200,7 +211,7 @@ int main() {
 						}
 					}
 					// Para la direccion 4 (abajo) y además comprobamos si el barco queda dentro del tablero e inicia el for.
-					else if (j == 4 && posicionAleatoriaFila + i <= 9)
+					else if (j == 4 && posicionAleatoriaFila + i < FILAS)
 					{
 						// Con este bucle iteramos entre las posiciones que ocupará el barco. Sumamos k en la fila porque la dirección es arriba.
 						for (int k = 0; k < i; k++)
@@ -226,27 +237,20 @@ int main() {
 				}
 			}
 		}
-	}
 
-#pragma endregion
+		// Hacemos lo mismo para el otro jugador.
 
-
-#pragma region barcosJugador2
-
-	// Con este bucle iteramos entre los tamaños del barco.
-	for (int i = 3; i <= 6; i++)
-	{
 		// Convertimos la variable de iteración i (que a su vez es el tamaño de los barcos) en un char para poder meterlo en la matriz del tablero. Esta parte le pregunté a la IA cómo hacerlo y me dió varias opciones, elegí esta.
-		char tamanyoBarco = i + '0';
+		tamanyoBarco = i + '0';
 
 		// Booleano para saber cuándo un barco ha sido colocado.
-		bool barcoColocado = false;
+		barcoColocado = false;
 
 		// En caso de que un barco haya sido colocado, salimos del bucle y aumentamos una iteración el for anterior para pasar al siguiente tamaño de barco.
 		while (!barcoColocado)
 		{
-			// Generamos una posicion aleatoria del 0 al 9 (tamaño del tablero) para filas y columnas que se regenera en caso de que no haya sido posible colocar un barco desde la posicion aleatoria en ninguna posición.
-			int posicionAleatoriaFila = rand() % filas, posicionAleatoriaColumna = rand() % columnas;
+			// Generamos una posicion aleatoria del 0 al 9 (tamaño del tablero) para FILAS y COLUMNAS que se regenera en caso de que no haya sido posible colocar un barco desde la posicion aleatoria en ninguna posición.
+			int posicionAleatoriaFila = rand() % FILAS, posicionAleatoriaColumna = rand() % COLUMNAS;
 
 			// Bucle para iterar entre las posiciones posibles (como en un cuadrante [1: Derecha, 2: Arriba, 3: Izquierda, 4: Abajo]).
 			for (int j = 1; j <= 4; j++)
@@ -258,7 +262,7 @@ int main() {
 				if (tableroJugador2[posicionAleatoriaFila][posicionAleatoriaColumna] == '~')
 				{
 					// Para la direccion 1 (derecha) y además comprobamos si el barco queda dentro del tablero e inicia el for.
-					if (j == 1 && posicionAleatoriaColumna + i <= 9)
+					if (j == 1 && posicionAleatoriaColumna + i < COLUMNAS)
 					{
 						// Con este bucle iteramos entre las posiciones que ocupará el barco. Sumamos k en la columna porque la dirección es derecha.
 						for (int k = 0; k < i; k++)
@@ -330,7 +334,7 @@ int main() {
 						}
 					}
 					// Para la direccion 4 (abajo) y además comprobamos si el barco queda dentro del tablero e inicia el for.
-					else if (j == 4 && posicionAleatoriaFila + i <= 9)
+					else if (j == 4 && posicionAleatoriaFila + i < FILAS)
 					{
 						// Con este bucle iteramos entre las posiciones que ocupará el barco. Sumamos k en la fila porque la dirección es arriba.
 						for (int k = 0; k < i; k++)
@@ -356,6 +360,7 @@ int main() {
 				}
 			}
 		}
+
 	}
 
 #pragma endregion
@@ -365,9 +370,9 @@ int main() {
 	// Imprimimos los dos tableros.
 	std::cout << "TABLERO JUGADOR 1:" << std::endl;
 
-	for (int i = 0; i < filas; i++)
+	for (int i = 0; i < FILAS; i++)
 	{
-		for (int j = 0; j < columnas; j++)
+		for (int j = 0; j < COLUMNAS; j++)
 		{
 			std::cout << " " << tableroJugador1[i][j];
 
@@ -379,9 +384,9 @@ int main() {
 
 	std::cout << "TABLERO JUGADOR 2:" << std::endl;
 
-	for (int i = 0; i < filas; i++)
+	for (int i = 0; i < FILAS; i++)
 	{
-		for (int j = 0; j < columnas; j++)
+		for (int j = 0; j < COLUMNAS; j++)
 		{
 			std::cout << " " << tableroJugador2[i][j];
 
@@ -389,208 +394,212 @@ int main() {
 		std::cout << std::endl;
 	}
 
-	std::cout << std::endl << "Presiona cualquier tecla para empezar a jugar: ";
-	std::cin.get(); // Detectamos cualquier tecla. Esta parte me la dijo la IA.
+	std::cout << std::endl;
 
-	std::cin.ignore(); // Limpiamos la entrada para que no se vuelva a activar sola.
+	// Detenemos la ejecución del programa hasta que se presione una tecla
+	system("pause");
 
 #pragma region gameplay
 
-	while (cantidadOsJugador1 < 18 && cantidadOsJugador2 < 18)
+	while (cantidadOsJugador1 < cantidadOsTotal && cantidadOsJugador2 < cantidadOsTotal)
 	{
 		// Limpiamos la pantalla. Esta parte me la dijo la IA.
 		system("cls");
 
-		// Indicamos a los jugadores de quién es el turno.
-		std::cout << "TURNO JUGADOR 1:" << std::endl;
-
-		//Imprimimos el tablero del jugador contrario para que el jugador actual pueda visualizar mejor la posición a atacar.
-		std::cout << "TABLERO DEL JUGADOR 2:" << std::endl;
-
-		for (int i = 0; i < filas; i++)
+		if (contadorTurno % 2 == 0)
 		{
-			for (int j = 0; j < columnas; j++)
-			{
-				std::cout << " " << tableroGameplayJugador2[i][j];
+			// Indicamos a los jugadores de quién es el turno.
+			std::cout << "TURNO JUGADOR 1:" << std::endl << std::endl;
 
+			//Imprimimos el tablero del jugador contrario para que el jugador actual pueda visualizar mejor la posición a atacar.
+			std::cout << "TABLERO DEL JUGADOR 2:" << std::endl;
+
+			for (int i = 0; i < FILAS; i++)
+			{
+				for (int j = 0; j < COLUMNAS; j++)
+				{
+					std::cout << " " << tableroGameplayJugador2[i][j];
+
+				}
+				std::cout << std::endl;
 			}
+
 			std::cout << std::endl;
-		}
-
-		std::cout << std::endl;
-
-		do
-		{
-			do
-			{
-				std::cout << "Introduzca la posicion de fila que desea atacar: ";
-				std::cin >> fila;
-				fila--;
-
-				if (fila > 9 || fila < 0)
-				{
-					std::cout << "Esa posicion no es valida, debe de estar entre 1 y 10." << std::endl << std::endl;
-				}
-
-			} while (fila > 9 || fila < 0);
 
 			do
 			{
-				std::cout << "Introduzca la posicion de columna que desea atacar: ";
-				std::cin >> columna;
-				columna--;
-
-				if (columna > 9 || columna < 0)
+				do
 				{
-					std::cout << "Esa posicion no es valida, debe de estar entre 1 y 10." << std::endl << std::endl;
+					std::cout << "Introduzca la posicion de fila que desea atacar: ";
+					std::cin >> fila;
+					fila--;
+
+					if (fila > 9 || fila < 0)
+					{
+						std::cout << "Esa posicion no es valida, debe de estar entre 1 y 10." << std::endl << std::endl;
+					}
+
+				} while (fila > 9 || fila < 0);
+
+				do
+				{
+					std::cout << "Introduzca la posicion de columna que desea atacar: ";
+					std::cin >> columna;
+					columna--;
+
+					if (columna > 9 || columna < 0)
+					{
+						std::cout << "Esa posicion no es valida, debe de estar entre 1 y 10." << std::endl << std::endl;
+					}
+
+				} while (columna > 9 || columna < 0);
+
+				if (tableroGameplayJugador2[fila][columna] != '~')
+				{
+					std::cout << "Esa posicion ya ha sido atacada." << std::endl;
 				}
 
-			} while (columna > 9 || columna < 0);
+			} while (tableroGameplayJugador2[fila][columna] != '~');
 
-			if (tableroGameplayJugador2[fila][columna] != '~')
+			if (tableroJugador2[fila][columna] == '~')
 			{
-				std::cout << "Esa posicion ya ha sido atacada." << std::endl;
+				tableroGameplayJugador2[fila][columna] = 'X';
+			}
+			else
+			{
+				tableroGameplayJugador2[fila][columna] = 'O';
+				cantidadOsJugador1++;
+
+				if (cantidadOsJugador1 == cantidadOsTotal)
+				{
+					break;
+				}
 			}
 
-		} while (tableroGameplayJugador2[fila][columna] != '~');
+			// Limpiamos la pantalla. Esta parte me la dijo la IA.
+			system("cls");
+
+			// Indicamos a los jugadores de quién es el turno.
+			std::cout << "TURNO JUGADOR 1:" << std::endl << std::endl;
+
+			//Imprimimos el tablero del jugador contrario para que el jugador actual pueda visualizar mejor la posición a atacar.
+			std::cout << "TABLERO DEL JUGADOR 2:" << std::endl;
+
+			for (int i = 0; i < FILAS; i++)
+			{
+				for (int j = 0; j < COLUMNAS; j++)
+				{
+					std::cout << " " << tableroGameplayJugador2[i][j];
+
+				}
+				std::cout << std::endl;
+			}
+
+			Sleep(1500);
+		}
+		else
+		{
+			// Indicamos a los jugadores de quién es el turno.
+			std::cout << "TURNO JUGADOR 2:" << std::endl << std::endl;
+
+			//Imprimimos el tablero del jugador contrario para que el jugador actual pueda visualizar mejor la posición a atacar.
+			std::cout << "TABLERO DEL JUGADOR 1:" << std::endl;
+
+			for (int i = 0; i < FILAS; i++)
+			{
+				for (int j = 0; j < COLUMNAS; j++)
+				{
+					std::cout << " " << tableroGameplayJugador1[i][j];
+
+				}
+				std::cout << std::endl;
+			}
+
+			std::cout << std::endl;
 		
-		if (tableroJugador2[fila][columna] == '~')
-		{
-			tableroGameplayJugador2[fila][columna] = 'X';
-		}
-		else
-		{
-			tableroGameplayJugador2[fila][columna] = 'O';
-			cantidadOsJugador1++;
-
-			if (cantidadOsJugador1 == 18)
-			{
-				break;
-			}
-		}
-
-		// Limpiamos la pantalla. Esta parte me la dijo la IA.
-		system("cls");
-
-		// Indicamos a los jugadores de quién es el turno.
-		std::cout << "TURNO JUGADOR 1:" << std::endl;
-
-		//Imprimimos el tablero del jugador contrario para que el jugador actual pueda visualizar mejor la posición a atacar.
-		std::cout << "TABLERO DEL JUGADOR 2:" << std::endl;
-
-		for (int i = 0; i < filas; i++)
-		{
-			for (int j = 0; j < columnas; j++)
-			{
-				std::cout << " " << tableroGameplayJugador2[i][j];
-
-			}
-			std::cout << std::endl;
-		}
-
-		Sleep(1500);
-
-		// Limpiamos la pantalla. Esta parte me la dijo la IA.
-		system("cls");
-
-		// Indicamos a los jugadores de quién es el turno.
-		std::cout << "TURNO JUGADOR 2:" << std::endl;
-
-		//Imprimimos el tablero del jugador contrario para que el jugador actual pueda visualizar mejor la posición a atacar.
-		std::cout << "TABLERO DEL JUGADOR 1:" << std::endl;
-
-		for (int i = 0; i < filas; i++)
-		{
-			for (int j = 0; j < columnas; j++)
-			{
-				std::cout << " " << tableroGameplayJugador1[i][j];
-
-			}
-			std::cout << std::endl;
-		}
-
-		std::cout << std::endl;
-
-		do
-		{
 			do
 			{
-				std::cout << "Introduzca la posicion de fila que desea atacar: ";
-				std::cin >> fila;
-				fila--;
-
-				if (fila > 9 || fila < 0)
+				do
 				{
-					std::cout << "Esa posicion no es valida, debe de estar entre 1 y 10." << std::endl << std::endl;
+					std::cout << "Introduzca la posicion de fila que desea atacar: ";
+					std::cin >> fila;
+					fila--;
+
+					if (fila > 9 || fila < 0)
+					{
+						std::cout << "Esa posicion no es valida, debe de estar entre 1 y 10." << std::endl << std::endl;
+					}
+
+				} while (fila > 9 || fila < 0);
+
+				do
+				{
+					std::cout << "Introduzca la posicion de columna que desea atacar: ";
+					std::cin >> columna;
+					columna--;
+
+					if (columna > 9 || columna < 0)
+					{
+						std::cout << "Esa posicion no es valida, debe de estar entre 1 y 10." << std::endl << std::endl;
+					}
+
+				} while (columna > 9 || columna < 0);
+
+				if (tableroGameplayJugador1[fila][columna] != '~')
+				{
+					std::cout << "Esa posicion ya ha sido atacada." << std::endl;
 				}
 
-			} while (fila > 9 || fila < 0);
+			} while (tableroGameplayJugador1[fila][columna] != '~');
 
-			do
+			if (tableroJugador1[fila][columna] == '~')
 			{
-				std::cout << "Introduzca la posicion de columna que desea atacar: ";
-				std::cin >> columna;
-				columna--;
+				tableroGameplayJugador1[fila][columna] = 'X';
+			}
+			else
+			{
+				tableroGameplayJugador1[fila][columna] = 'O';
+				cantidadOsJugador2++;
 
-				if (columna > 9 || columna < 0)
+				if (cantidadOsJugador2 == cantidadOsTotal)
 				{
-					std::cout << "Esa posicion no es valida, debe de estar entre 1 y 10." << std::endl << std::endl;
+					break;
 				}
-
-			} while (columna > 9 || columna < 0);
-
-			if (tableroGameplayJugador1[fila][columna] != '~')
-			{
-				std::cout << "Esa posicion ya ha sido atacada." << std::endl;
 			}
 
-		} while (tableroGameplayJugador1[fila][columna] != '~');
+			// Limpiamos la pantalla. Esta parte me la dijo la IA.
+			system("cls");
 
-		if (tableroJugador1[fila][columna] == '~')
-		{
-			tableroGameplayJugador1[fila][columna] = 'X';
-		}
-		else
-		{
-			tableroGameplayJugador1[fila][columna] = 'O';
-			cantidadOsJugador2++;
+			// Indicamos a los jugadores de quién es el turno.
+			std::cout << "TURNO JUGADOR 2:" << std::endl << std::endl;
 
-			if (cantidadOsJugador2 == 18)
+			//Imprimimos el tablero del jugador contrario para que el jugador actual pueda visualizar mejor la posición a atacar.
+			std::cout << "TABLERO DEL JUGADOR 1:" << std::endl;
+
+			for (int i = 0; i < FILAS; i++)
 			{
-				break;
+				for (int j = 0; j < COLUMNAS; j++)
+				{
+					std::cout << " " << tableroGameplayJugador1[i][j];
+
+				}
+				std::cout << std::endl;
 			}
+
+			Sleep(1500);
 		}
 
-		// Limpiamos la pantalla. Esta parte me la dijo la IA.
-		system("cls");
-
-		// Indicamos a los jugadores de quién es el turno.
-		std::cout << "TURNO JUGADOR 2:" << std::endl;
-
-		//Imprimimos el tablero del jugador contrario para que el jugador actual pueda visualizar mejor la posición a atacar.
-		std::cout << "TABLERO DEL JUGADOR 1:" << std::endl;
-
-		for (int i = 0; i < filas; i++)
-		{
-			for (int j = 0; j < columnas; j++)
-			{
-				std::cout << " " << tableroGameplayJugador1[i][j];
-
-			}
-			std::cout << std::endl;
-		}
-
-		Sleep(1500);
+		contadorTurno++;
 	}
 
-	if (cantidadOsJugador1 >= 18)
+	if (cantidadOsJugador1 >= cantidadOsTotal)
 	{
 		//Imprimimos el tablero del jugador contrario para que el jugador actual pueda visualizar mejor la posición a atacar.
-		std::cout << "TABLERO DEL JUGADOR 2:" << std::endl;
+		std::cout << std::endl << "TABLERO DEL JUGADOR 2:" << std::endl;
 
-		for (int i = 0; i < filas; i++)
+		for (int i = 0; i < FILAS; i++)
 		{
-			for (int j = 0; j < columnas; j++)
+			for (int j = 0; j < COLUMNAS; j++)
 			{
 				std::cout << " " << tableroGameplayJugador2[i][j];
 
@@ -602,14 +611,14 @@ int main() {
 
 		std::cout << "El jugador 1 gana! Enhorabuena, has hundido la flota de tu rival." << std::endl;
 	}
-	else if (cantidadOsJugador2 >= 18)
+	else if (cantidadOsJugador2 >= cantidadOsTotal)
 	{
 		//Imprimimos el tablero del jugador contrario para que el jugador actual pueda visualizar mejor la posición a atacar.
-		std::cout << "TABLERO DEL JUGADOR 1:" << std::endl;
+		std::cout << std::endl << "TABLERO DEL JUGADOR 1:" << std::endl;
 
-		for (int i = 0; i < filas; i++)
+		for (int i = 0; i < FILAS; i++)
 		{
-			for (int j = 0; j < columnas; j++)
+			for (int j = 0; j < COLUMNAS; j++)
 			{
 				std::cout << " " << tableroGameplayJugador1[i][j];
 
