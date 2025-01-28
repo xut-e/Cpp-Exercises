@@ -494,8 +494,6 @@ int main() {
 				}
 				std::cout << std::endl;
 			}
-
-			Sleep(1500);
 		}
 		else
 		{
@@ -585,9 +583,9 @@ int main() {
 				}
 				std::cout << std::endl;
 			}
-
-			Sleep(1500);
 		}
+
+		Sleep(1500);
 
 		contadorTurno++;
 	}
