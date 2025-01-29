@@ -86,7 +86,7 @@ int main() {
 	{
 		do
 		{
-			std::cout << "Seleccione una opción: ";
+			std::cout << "Seleccione una opcion1: ";
 			std::cin >> opcionPaginaPrincipal;
 
 			if (opcionPaginaPrincipal != '1' && opcionPaginaPrincipal != '2')
@@ -107,7 +107,7 @@ int main() {
 
 			do
 			{
-				std::cout << "Seleccione una opcion: ";
+				std::cout << "Seleccione una opcion2: ";
 				std::cin >> opcionPaginaBarcos;
 
 				if (opcionPaginaBarcos != '1' && opcionPaginaBarcos != '2' && opcionPaginaBarcos != '3')
@@ -422,215 +422,455 @@ int main() {
 			}
 			else if (opcionPaginaBarcos == '2')
 			{
-				bool barcosJugador1Colocados = false, barcosJugador2Colocados = false, barcoColocado = false, imposibleColocar, posibleColocarDerecha, posibleColocarArriba, posibleColocarIzquierda, posibleColocarAbajo;
-				int filaColocar, columnaColocar, direccionColocar;
-
-				system("cls");
-
-				std::cout << "JUGADOR 1, coloque sus barcos:" << std::endl << std::endl;
-
-				while (!barcosJugador1Colocados)
+				bool barcosJugador1Colocados = false, barcosJugador2Colocados = false;
+				int turnoColocar = 0;
+				while (!barcosJugador1Colocados || !barcosJugador2Colocados)
 				{
-					for (int i = barcoMasPequenyo; i <= barcoMasGrande; i++)
+					bool barcoColocado = false, imposibleColocar, posibleColocarDerecha, posibleColocarArriba, posibleColocarIzquierda, posibleColocarAbajo;
+					int filaColocar, columnaColocar, direccionColocar;
+
+					system("cls");
+
+					if (turnoColocar % 2 == 0)
 					{
-						barcoColocado = false;
-						char tamanyoBarco = i + '0';
+#pragma region colocacion_manual_Jugador_1
 
-						while (!barcoColocado)
+						std::cout << "JUGADOR 1, coloque sus barcos:" << std::endl << std::endl;
+
+						while (!barcosJugador1Colocados)
 						{
-							for (int i = 0; i < FILAS; i++)
+							for (int i = barcoMasPequenyo; i <= barcoMasGrande; i++)
 							{
-								for (int j = 0; j < COLUMNAS; j++)
+								barcoColocado = false;
+								char tamanyoBarco = i + '0';
+
+								while (!barcoColocado)
 								{
-									std::cout << " " << tableroGameplayJugador1[i][j];
-
-								}
-								std::cout << std::endl;
-							}
-
-							std::cout << std::endl;
-
-							do
-							{
-								imposibleColocar = false;
-								posibleColocarAbajo = true;
-								posibleColocarArriba = true;
-								posibleColocarDerecha = true;
-								posibleColocarIzquierda = true;
-
-								do
-								{
-									std::cout << "Seleccione la fila en la que desea colocar el barco de tamanyo " << i << ": ";
-									std::cin >> filaColocar;
-									filaColocar--;
-
-									if (filaColocar < 0 || filaColocar > FILAS - 1)
+									for (int i = 0; i < FILAS; i++)
 									{
-										std::cout << "Esa fila no existe." << std::endl;
-									}
-								} while (filaColocar < 0 || filaColocar > FILAS - 1);
-
-
-								do
-								{
-									std::cout << "Seleccione la columna en la que desea colocar el barco de tamanyo " << i << ": ";
-									std::cin >> columnaColocar;
-									columnaColocar--;
-
-									if (columnaColocar < 0 || columnaColocar > COLUMNAS - 1)
-									{
-										std::cout << "Esa columna no existe." << std::endl;
-									}
-								} while (columnaColocar < 0 || columnaColocar > COLUMNAS - 1);
-
-								for (int j = 0; j < FILAS; j++)
-								{
-									for (int k = 0; k < COLUMNAS; k++)
-									{
-										for (int l = 0; l < 4; l++)
+										for (int j = 0; j < COLUMNAS; j++)
 										{
-											if (l == 0 && columnaColocar + i < COLUMNAS)
-											{
-												for (int m = 0; m < i; m++)
-												{
-													if (tableroGameplayJugador1[j][k + m] != '~')
-													{
-														posibleColocarDerecha = false;
-														break;
-													}
-												}
-											}
-											else if (l== 1 && filaColocar - i > 0)
-											{
-												for (int m = 0; m < i; m++)
-												{
-													if (tableroGameplayJugador1[j - m][k] != '~')
-													{
-														posibleColocarArriba = false;
-														break;
-													}
-												}
-											}
-											else if (l == 2 && columnaColocar - i > 0)
-											{
-												for (int m = 0; m < i; m++)
-												{
-													if (tableroGameplayJugador1[j][k - m] != '~')
-													{
-														posibleColocarIzquierda = false;
-														break;
-													}
-												}
-											}
-											else if (l == 3 && filaColocar + i < FILAS)
-											{
-												for (int m = 0; m < i; m++)
-												{
-													if (tableroGameplayJugador1[j + m][k] != '~')
-													{
-														posibleColocarAbajo = false;
-														break;
-													}
-												}
-											}
-											else
-											{
-												if (filaColocar + i >= FILAS)
-												{
-													posibleColocarAbajo = false;
-												}
-												else if (columnaColocar - i <= 0)
-												{
-													posibleColocarIzquierda = false;
-												}
-												else if (filaColocar - i <= 0)
-												{
-													posibleColocarArriba = false;
-												}
-												else if (columnaColocar + i >= COLUMNAS)
-												{
-													posibleColocarDerecha = false;
-												}
-											}
-											
+											std::cout << " " << tableroGameplayJugador1[i][j];
+
 										}
+										std::cout << std::endl;
 									}
+
+									std::cout << std::endl;
+
+									do
+									{
+										imposibleColocar = false;
+										posibleColocarAbajo = true;
+										posibleColocarArriba = true;
+										posibleColocarDerecha = true;
+										posibleColocarIzquierda = true;
+
+										do
+										{
+											std::cout << "Seleccione la fila en la que desea colocar el barco de tamanyo " << i << ": ";
+											std::cin >> filaColocar;
+											filaColocar--;
+
+											if (filaColocar < 0 || filaColocar > FILAS - 1)
+											{
+												std::cout << "Esa fila no existe." << std::endl;
+											}
+										} while (filaColocar < 0 || filaColocar > FILAS - 1);
+
+
+										do
+										{
+											std::cout << "Seleccione la columna en la que desea colocar el barco de tamanyo " << i << ": ";
+											std::cin >> columnaColocar;
+											columnaColocar--;
+
+											if (columnaColocar < 0 || columnaColocar > COLUMNAS - 1)
+											{
+												std::cout << "Esa columna no existe." << std::endl;
+											}
+										} while (columnaColocar < 0 || columnaColocar > COLUMNAS - 1);
+
+										for (int j = 0; j < FILAS; j++)
+										{
+											for (int k = 0; k < COLUMNAS; k++)
+											{
+												for (int l = 0; l < 4; l++)
+												{
+													if (l == 0 && columnaColocar + (i - 1) > COLUMNAS)
+													{
+														for (int m = 0; m < i; m++)
+														{
+															if (tableroGameplayJugador1[j][k + m] != '~')
+															{
+																posibleColocarDerecha = false;
+																break;
+															}
+														}
+													}
+													else if (l == 1 && filaColocar - (i - 1) < 0)
+													{
+														for (int m = 0; m < i; m++)
+														{
+															if (tableroGameplayJugador1[j - m][k] != '~')
+															{
+																posibleColocarArriba = false;
+																break;
+															}
+														}
+													}
+													else if (l == 2 && columnaColocar - (i - 1) < 0)
+													{
+														for (int m = 0; m < i; m++)
+														{
+															if (tableroGameplayJugador1[j][k - m] != '~')
+															{
+																posibleColocarIzquierda = false;
+																break;
+															}
+														}
+													}
+													else if (l == 3 && filaColocar + (i - 1) > FILAS)
+													{
+														for (int m = 0; m < i; m++)
+														{
+															if (tableroGameplayJugador1[j + m][k] != '~')
+															{
+																posibleColocarAbajo = false;
+																break;
+															}
+														}
+													}
+													else
+													{
+														if (filaColocar + i >= FILAS)
+														{
+															posibleColocarAbajo = false;
+														}
+														else if (columnaColocar - i <= 0)
+														{
+															posibleColocarIzquierda = false;
+														}
+														else if (filaColocar - i <= 0)
+														{
+															posibleColocarArriba = false;
+														}
+														else if (columnaColocar + i >= COLUMNAS)
+														{
+															posibleColocarDerecha = false;
+														}
+													}
+
+												}
+											}
+										}
+
+										if (!posibleColocarAbajo && !posibleColocarArriba && !posibleColocarDerecha && !posibleColocarIzquierda)
+										{
+											imposibleColocar = true;
+											std::cout << "No es posible colocar este barco." << std::endl;
+										}
+
+
+									} while (imposibleColocar);
+
+
+
+									std::cout << "Direcciones posibles:" << std::endl;
+									std::cout << "1) Derecha." << std::endl;
+									std::cout << "2) Arriba." << std::endl;
+									std::cout << "3) Izquierda." << std::endl;
+									std::cout << "4) Abajo." << std::endl;
+
+									do
+									{
+										std::cout << "Seleccione una opcion3: ";
+										std::cin >> direccionColocar;
+
+										if (direccionColocar != 1 && direccionColocar != 2 && direccionColocar != 3 && direccionColocar != 4)
+										{
+											std::cout << "Esa direccion no existe." << std::endl;
+										}
+
+									} while ((direccionColocar != 1 && direccionColocar != 2 && direccionColocar != 3 && direccionColocar != 4));
+
+
+									if (direccionColocar == 1 && posibleColocarDerecha)
+									{
+										for (int l = 0; l < i; l++)
+										{
+											tableroGameplayJugador1[filaColocar][columnaColocar + l] = tamanyoBarco;
+										}
+										barcoColocado = true;
+									}
+									else if (direccionColocar == 2 && posibleColocarArriba)
+									{
+										for (int l = 0; l < i; l++)
+										{
+											tableroGameplayJugador1[filaColocar - l][columnaColocar] = tamanyoBarco;
+										}
+										barcoColocado = true;
+									}
+									else if (direccionColocar == 3 && posibleColocarIzquierda)
+									{
+										for (int l = 0; l < i; l++)
+										{
+											tableroGameplayJugador1[filaColocar][columnaColocar - l] = tamanyoBarco;
+										}
+										barcoColocado = true;
+									}
+									else if (direccionColocar == 4 && posibleColocarAbajo)
+									{
+										for (int l = 0; l < i; l++)
+										{
+											tableroGameplayJugador1[filaColocar + l][columnaColocar] = tamanyoBarco;
+										}
+										barcoColocado = true;
+									}
+
+									system("cls");
+									if (i == barcoMasGrande && barcoColocado)
+									{
+										barcosJugador1Colocados = true;
+										turnoColocar++;
+										break;
+									}
+
+									if (!barcoColocado)
+									{
+										std::cout << "El barco no se puede colocar en esa posicion." << std::endl;
+									}
+
+									std::cout << "JUGADOR 1, coloque sus barcos:" << std::endl << std::endl;
 								}
-
-								if (!posibleColocarAbajo && !posibleColocarArriba && !posibleColocarDerecha && !posibleColocarIzquierda)
-								{
-									imposibleColocar = true;
-									std::cout << "No es posible colocar este barco." << std::endl;
-								}
-								
-
-							} while (imposibleColocar);
-
-							
-
-							std::cout << "Direcciones posibles:" << std::endl;
-							std::cout << "1) Derecha." << std::endl;
-							std::cout << "2) Arriba." << std::endl;
-							std::cout << "3) Izquierda." << std::endl;
-							std::cout << "4) Abajo." << std::endl;
-
-							do
-							{
-								std::cout << "Seleccione una opcion: ";
-								std::cin >> direccionColocar;
-
-								if (direccionColocar != 1 && direccionColocar != 2 && direccionColocar != 3 && direccionColocar != 4)
-								{
-									std::cout << "Esa direccion no existe." << std::endl;
-								}
-
-							} while ((direccionColocar != 1 && direccionColocar != 2 && direccionColocar != 3 && direccionColocar != 4));
-
-							
-							if (direccionColocar == 1 && posibleColocarDerecha)
-							{
-								for (int l = 0; l < i; l++)
-								{
-									tableroGameplayJugador1[filaColocar][columnaColocar + l] = tamanyoBarco;
-								}
-								barcoColocado = true;
 							}
-							else if (direccionColocar == 2 && posibleColocarArriba)
-							{
-								for (int l = 0; l < i; l++)
-								{
-									tableroGameplayJugador1[filaColocar - l][columnaColocar] = tamanyoBarco;
-								}
-								barcoColocado = true;
-							}
-							else if (direccionColocar == 3 && posibleColocarIzquierda)
-							{
-								for (int l = 0; l < i; l++)
-								{
-									tableroGameplayJugador1[filaColocar][columnaColocar - l] = tamanyoBarco;
-								}
-								barcoColocado = true;
-							}
-							else if (direccionColocar == 4 && posibleColocarAbajo)
-							{
-								for (int l = 0; l < i; l++)
-								{
-									tableroGameplayJugador1[filaColocar + l][columnaColocar] = tamanyoBarco;
-								}
-								barcoColocado = true;
-							}
-
-							system("cls");
-
-							if (!barcoColocado)
-							{
-								std::cout << "El barco no se puede colocar en esa posicion." << std::endl;
-							}
-
-							std::cout << "JUGADOR 1, coloque sus barcos:" << std::endl << std::endl;
 						}
+#pragma endregion
+					}
+					else
+					{
+
+#pragma region colocacion_manual_Jugador_2
+
+						std::cout << "JUGADOR 2, coloque sus barcos:" << std::endl << std::endl;
+
+						while (!barcosJugador2Colocados)
+						{
+							for (int i = barcoMasPequenyo; i <= barcoMasGrande; i++)
+							{
+								barcoColocado = false;
+								char tamanyoBarco = i + '0';
+
+								while (!barcoColocado)
+								{
+									for (int i = 0; i < FILAS; i++)
+									{
+										for (int j = 0; j < COLUMNAS; j++)
+										{
+											std::cout << " " << tableroGameplayJugador2[i][j];
+
+										}
+										std::cout << std::endl;
+									}
+
+									std::cout << std::endl;
+
+									do
+									{
+										imposibleColocar = false;
+										posibleColocarAbajo = true;
+										posibleColocarArriba = true;
+										posibleColocarDerecha = true;
+										posibleColocarIzquierda = true;
+
+										do
+										{
+											std::cout << "Seleccione la fila en la que desea colocar el barco de tamanyo " << i << ": ";
+											std::cin >> filaColocar;
+											filaColocar--;
+
+											if (filaColocar < 0 || filaColocar > FILAS - 1)
+											{
+												std::cout << "Esa fila no existe." << std::endl;
+											}
+										} while (filaColocar < 0 || filaColocar > FILAS - 1);
+
+
+										do
+										{
+											std::cout << "Seleccione la columna en la que desea colocar el barco de tamanyo " << i << ": ";
+											std::cin >> columnaColocar;
+											columnaColocar--;
+
+											if (columnaColocar < 0 || columnaColocar > COLUMNAS - 1)
+											{
+												std::cout << "Esa columna no existe." << std::endl;
+											}
+										} while (columnaColocar < 0 || columnaColocar > COLUMNAS - 1);
+
+										for (int j = 0; j < FILAS; j++)
+										{
+											for (int k = 0; k < COLUMNAS; k++)
+											{
+												for (int l = 0; l < 4; l++)
+												{
+													if (l == 0 && columnaColocar + (i - 1) > COLUMNAS)
+													{
+														for (int m = 0; m < i; m++)
+														{
+															if (tableroGameplayJugador2[j][k + m] != '~')
+															{
+																posibleColocarDerecha = false;
+																break;
+															}
+														}
+													}
+													else if (l == 1 && filaColocar - (i - 1) < 0)
+													{
+														for (int m = 0; m < i; m++)
+														{
+															if (tableroGameplayJugador2[j - m][k] != '~')
+															{
+																posibleColocarArriba = false;
+																break;
+															}
+														}
+													}
+													else if (l == 2 && columnaColocar - (i - 1) < 0)
+													{
+														for (int m = 0; m < i; m++)
+														{
+															if (tableroGameplayJugador2[j][k - m] != '~')
+															{
+																posibleColocarIzquierda = false;
+																break;
+															}
+														}
+													}
+													else if (l == 3 && filaColocar + (i - 1) > FILAS)
+													{
+														for (int m = 0; m < i; m++)
+														{
+															if (tableroGameplayJugador2[j + m][k] != '~')
+															{
+																posibleColocarAbajo = false;
+																break;
+															}
+														}
+													}
+													else
+													{
+														if (filaColocar + i >= FILAS)
+														{
+															posibleColocarAbajo = false;
+														}
+														else if (columnaColocar - i <= 0)
+														{
+															posibleColocarIzquierda = false;
+														}
+														else if (filaColocar - i <= 0)
+														{
+															posibleColocarArriba = false;
+														}
+														else if (columnaColocar + i >= COLUMNAS)
+														{
+															posibleColocarDerecha = false;
+														}
+													}
+
+												}
+											}
+										}
+
+										if (!posibleColocarAbajo && !posibleColocarArriba && !posibleColocarDerecha && !posibleColocarIzquierda)
+										{
+											imposibleColocar = true;
+											std::cout << "No es posible colocar este barco." << std::endl;
+										}
+
+
+									} while (imposibleColocar);
+
+
+
+									std::cout << "Direcciones posibles:" << std::endl;
+									std::cout << "1) Derecha." << std::endl;
+									std::cout << "2) Arriba." << std::endl;
+									std::cout << "3) Izquierda." << std::endl;
+									std::cout << "4) Abajo." << std::endl;
+
+									do
+									{
+										std::cout << "Seleccione una opcion: ";
+										std::cin >> direccionColocar;
+
+										if (direccionColocar != 1 && direccionColocar != 2 && direccionColocar != 3 && direccionColocar != 4)
+										{
+											std::cout << "Esa direccion no existe." << std::endl;
+										}
+
+									} while ((direccionColocar != 1 && direccionColocar != 2 && direccionColocar != 3 && direccionColocar != 4));
+
+
+									if (direccionColocar == 1 && posibleColocarDerecha)
+									{
+										for (int l = 0; l < i; l++)
+										{
+											tableroGameplayJugador2[filaColocar][columnaColocar + l] = tamanyoBarco;
+										}
+										barcoColocado = true;
+									}
+									else if (direccionColocar == 2 && posibleColocarArriba)
+									{
+										for (int l = 0; l < i; l++)
+										{
+											tableroGameplayJugador2[filaColocar - l][columnaColocar] = tamanyoBarco;
+										}
+										barcoColocado = true;
+									}
+									else if (direccionColocar == 3 && posibleColocarIzquierda)
+									{
+										for (int l = 0; l < i; l++)
+										{
+											tableroGameplayJugador2[filaColocar][columnaColocar - l] = tamanyoBarco;
+										}
+										barcoColocado = true;
+									}
+									else if (direccionColocar == 4 && posibleColocarAbajo)
+									{
+										for (int l = 0; l < i; l++)
+										{
+											tableroGameplayJugador2[filaColocar + l][columnaColocar] = tamanyoBarco;
+										}
+										barcoColocado = true;
+									}
+
+									system("cls");
+
+									if (i == barcoMasGrande && barcoColocado)
+									{
+										barcosJugador2Colocados = true;
+										todoListo = true;
+										break;
+									}
+
+									if (!barcoColocado)
+									{
+										std::cout << "El barco no se puede colocar en esa posicion." << std::endl;
+									}
+
+									std::cout << "JUGADOR 2, coloque sus barcos:" << std::endl << std::endl;
+								}
+							}
+						}
+#pragma endregion
+
 					}
 				}
+				
+				
+
+				
 			}
 			else if (opcionPaginaBarcos == '3')
 			{
