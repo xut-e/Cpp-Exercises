@@ -167,7 +167,45 @@ int main() {
 
 			if (opcionPaginaBarcos == '1')
 			{
-#pragma region barcosJugadores
+#pragma region barcosJugadoresAleatorio
+
+				system("cls");
+
+				std::cout << "TABLERO JUGADOR 1: " << std::endl << std::endl;
+
+				for (int i = 0; i < FILAS; i++)
+				{
+					for (int j = 0; j < COLUMNAS; j++)
+					{
+						std::cout << tableroJugador1[i][j];
+
+						if (j < COLUMNAS - 1)
+						{
+							std::cout << " ";
+						}
+					}
+					std::cout << std::endl;
+				}
+
+				std::cout << std::endl << std::endl;
+
+				std::cout << "TABLERO JUGADOR 2: " << std::endl << std::endl;
+
+				for (int i = 0; i < FILAS; i++)
+				{
+					for (int j = 0; j < COLUMNAS; j++)
+					{
+						std::cout << tableroJugador2[i][j];
+
+						if (j < COLUMNAS - 1)
+						{
+							std::cout << " ";
+						}
+					}
+					std::cout << std::endl;
+				}
+
+				system("pause");
 
 				// Con este bucle iteramos entre los tamaños del barco.
 				for (int i = barcoMasPequenyo; i <= barcoMasGrande; i++)
@@ -418,6 +456,46 @@ int main() {
 
 				}
 
+				system("cls");
+
+				std::cout << "TABLERO JUGADOR 1: " << std::endl << std::endl;
+
+				for (int i = 0; i < FILAS; i++)
+				{
+					for (int j = 0; j < COLUMNAS; j++)
+					{
+						std::cout << tableroJugador1[i][j];
+
+						if (j < COLUMNAS - 1)
+						{
+							std::cout << " ";
+						}
+					}
+					std::cout << std::endl;
+				}
+
+				std::cout << std::endl << std::endl;
+
+				std::cout << "TABLERO JUGADOR 2: " << std::endl << std::endl;
+
+				for (int i = 0; i < FILAS; i++)
+				{
+					for (int j = 0; j < COLUMNAS; j++)
+					{
+						std::cout << tableroJugador2[i][j];
+
+						if (j < COLUMNAS - 1)
+						{
+							std::cout << " ";
+						}
+					}
+					std::cout << std::endl;
+				}
+
+				todoListo = true;
+
+				system("pause");
+
 #pragma endregion
 			}
 			else if (opcionPaginaBarcos == '2')
@@ -450,7 +528,7 @@ int main() {
 									{
 										for (int j = 0; j < COLUMNAS; j++)
 										{
-											std::cout << " " << tableroGameplayJugador1[i][j];
+											std::cout << " " << tableroJugador1[i][j];
 
 										}
 										std::cout << std::endl;
@@ -501,7 +579,7 @@ int main() {
 													{
 														for (int m = 0; m < i; m++)
 														{
-															if (tableroGameplayJugador1[j][k + m] != '~')
+															if (tableroJugador1[j][k + m] != '~')
 															{
 																posibleColocarDerecha = false;
 																break;
@@ -512,7 +590,7 @@ int main() {
 													{
 														for (int m = 0; m < i; m++)
 														{
-															if (tableroGameplayJugador1[j - m][k] != '~')
+															if (tableroJugador1[j - m][k] != '~')
 															{
 																posibleColocarArriba = false;
 																break;
@@ -523,7 +601,7 @@ int main() {
 													{
 														for (int m = 0; m < i; m++)
 														{
-															if (tableroGameplayJugador1[j][k - m] != '~')
+															if (tableroJugador1[j][k - m] != '~')
 															{
 																posibleColocarIzquierda = false;
 																break;
@@ -534,7 +612,7 @@ int main() {
 													{
 														for (int m = 0; m < i; m++)
 														{
-															if (tableroGameplayJugador1[j + m][k] != '~')
+															if (tableroJugador1[j + m][k] != '~')
 															{
 																posibleColocarAbajo = false;
 																break;
@@ -594,38 +672,83 @@ int main() {
 
 									} while ((direccionColocar != 1 && direccionColocar != 2 && direccionColocar != 3 && direccionColocar != 4));
 
+									bool posibleColocar = true;
 
 									if (direccionColocar == 1 && posibleColocarDerecha)
 									{
 										for (int l = 0; l < i; l++)
 										{
-											tableroGameplayJugador1[filaColocar][columnaColocar + l] = tamanyoBarco;
+											if (tableroJugador1[filaColocar][columnaColocar + l] != '~')
+											{
+												posibleColocar = false;
+												break;
+											}
 										}
-										barcoColocado = true;
+										if (posibleColocar)
+										{
+											for (int l = 0; l < i; l++)
+											{
+												tableroJugador1[filaColocar][columnaColocar + l] = tamanyoBarco;
+											}
+											barcoColocado = true;
+										}
 									}
 									else if (direccionColocar == 2 && posibleColocarArriba)
 									{
 										for (int l = 0; l < i; l++)
 										{
-											tableroGameplayJugador1[filaColocar - l][columnaColocar] = tamanyoBarco;
+											if (tableroJugador1[filaColocar - l][columnaColocar] != '~')
+											{
+												posibleColocar = false;
+												break;
+											}
 										}
-										barcoColocado = true;
+										if (posibleColocar)
+										{
+											for (int l = 0; l < i; l++)
+											{
+												tableroJugador1[filaColocar][columnaColocar - l] = tamanyoBarco;
+											}
+											barcoColocado = true;
+										}
 									}
 									else if (direccionColocar == 3 && posibleColocarIzquierda)
 									{
 										for (int l = 0; l < i; l++)
 										{
-											tableroGameplayJugador1[filaColocar][columnaColocar - l] = tamanyoBarco;
+											if (tableroJugador1[filaColocar][columnaColocar - l] != '~')
+											{
+												posibleColocar = false;
+												break;
+											}
 										}
-										barcoColocado = true;
+										if (posibleColocar)
+										{
+											for (int l = 0; l < i; l++)
+											{
+												tableroJugador1[filaColocar][columnaColocar - l] = tamanyoBarco;
+											}
+											barcoColocado = true;
+										}
 									}
 									else if (direccionColocar == 4 && posibleColocarAbajo)
 									{
 										for (int l = 0; l < i; l++)
 										{
-											tableroGameplayJugador1[filaColocar + l][columnaColocar] = tamanyoBarco;
+											if (tableroJugador1[filaColocar + l][columnaColocar] != '~')
+											{
+												posibleColocar = false;
+												break;
+											}
 										}
-										barcoColocado = true;
+										if (posibleColocar)
+										{
+											for (int l = 0; l < i; l++)
+											{
+												tableroJugador1[filaColocar + l][columnaColocar] = tamanyoBarco;
+											}
+											barcoColocado = true;
+										}
 									}
 
 									system("cls");
@@ -667,7 +790,7 @@ int main() {
 									{
 										for (int j = 0; j < COLUMNAS; j++)
 										{
-											std::cout << " " << tableroGameplayJugador2[i][j];
+											std::cout << " " << tableroJugador2[i][j];
 
 										}
 										std::cout << std::endl;
@@ -718,7 +841,7 @@ int main() {
 													{
 														for (int m = 0; m < i; m++)
 														{
-															if (tableroGameplayJugador2[j][k + m] != '~')
+															if (tableroJugador2[j][k + m] != '~')
 															{
 																posibleColocarDerecha = false;
 																break;
@@ -729,7 +852,7 @@ int main() {
 													{
 														for (int m = 0; m < i; m++)
 														{
-															if (tableroGameplayJugador2[j - m][k] != '~')
+															if (tableroJugador2[j - m][k] != '~')
 															{
 																posibleColocarArriba = false;
 																break;
@@ -740,7 +863,7 @@ int main() {
 													{
 														for (int m = 0; m < i; m++)
 														{
-															if (tableroGameplayJugador2[j][k - m] != '~')
+															if (tableroJugador2[j][k - m] != '~')
 															{
 																posibleColocarIzquierda = false;
 																break;
@@ -751,7 +874,7 @@ int main() {
 													{
 														for (int m = 0; m < i; m++)
 														{
-															if (tableroGameplayJugador2[j + m][k] != '~')
+															if (tableroJugador2[j + m][k] != '~')
 															{
 																posibleColocarAbajo = false;
 																break;
@@ -801,7 +924,7 @@ int main() {
 
 									do
 									{
-										std::cout << "Seleccione una opcion: ";
+										std::cout << "Seleccione una opcion3: ";
 										std::cin >> direccionColocar;
 
 										if (direccionColocar != 1 && direccionColocar != 2 && direccionColocar != 3 && direccionColocar != 4)
@@ -811,45 +934,90 @@ int main() {
 
 									} while ((direccionColocar != 1 && direccionColocar != 2 && direccionColocar != 3 && direccionColocar != 4));
 
+									bool posibleColocar = true;
 
 									if (direccionColocar == 1 && posibleColocarDerecha)
 									{
 										for (int l = 0; l < i; l++)
 										{
-											tableroGameplayJugador2[filaColocar][columnaColocar + l] = tamanyoBarco;
+											if (tableroJugador2[filaColocar][columnaColocar + l] != '~')
+											{
+												posibleColocar = false;
+												break;
+											}
 										}
-										barcoColocado = true;
+										if (posibleColocar)
+										{
+											for (int l = 0; l < i; l++)
+											{
+												tableroJugador2[filaColocar][columnaColocar + l] = tamanyoBarco;
+											}
+											barcoColocado = true;
+										}
 									}
 									else if (direccionColocar == 2 && posibleColocarArriba)
 									{
 										for (int l = 0; l < i; l++)
 										{
-											tableroGameplayJugador2[filaColocar - l][columnaColocar] = tamanyoBarco;
+											if (tableroJugador2[filaColocar - l][columnaColocar] != '~')
+											{
+												posibleColocar = false;
+												break;
+											}
 										}
-										barcoColocado = true;
+										if (posibleColocar)
+										{
+											for (int l = 0; l < i; l++)
+											{
+												tableroJugador2[filaColocar][columnaColocar - l] = tamanyoBarco;
+											}
+											barcoColocado = true;
+										}
 									}
 									else if (direccionColocar == 3 && posibleColocarIzquierda)
 									{
 										for (int l = 0; l < i; l++)
 										{
-											tableroGameplayJugador2[filaColocar][columnaColocar - l] = tamanyoBarco;
+											if (tableroJugador2[filaColocar][columnaColocar - l] != '~')
+											{
+												posibleColocar = false;
+												break;
+											}
 										}
-										barcoColocado = true;
+										if (posibleColocar)
+										{
+											for (int l = 0; l < i; l++)
+											{
+												tableroJugador1[filaColocar][columnaColocar - l] = tamanyoBarco;
+											}
+											barcoColocado = true;
+										}
 									}
 									else if (direccionColocar == 4 && posibleColocarAbajo)
 									{
 										for (int l = 0; l < i; l++)
 										{
-											tableroGameplayJugador2[filaColocar + l][columnaColocar] = tamanyoBarco;
+											if (tableroJugador2[filaColocar + l][columnaColocar] != '~')
+											{
+												posibleColocar = false;
+												break;
+											}
 										}
-										barcoColocado = true;
+										if (posibleColocar)
+										{
+											for (int l = 0; l < i; l++)
+											{
+												tableroJugador2[filaColocar + l][columnaColocar] = tamanyoBarco;
+											}
+											barcoColocado = true;
+										}
 									}
 
 									system("cls");
-
 									if (i == barcoMasGrande && barcoColocado)
 									{
 										barcosJugador2Colocados = true;
+										turnoColocar++;
 										todoListo = true;
 										break;
 									}
@@ -867,15 +1035,32 @@ int main() {
 
 					}
 				}
-				
-				
 
-				
+
+
+
 			}
 			else if (opcionPaginaBarcos == '3')
 			{
 				todoListo = false;
-				break;
+				system("cls");
+
+				std::cout << "                                Bienvenido a" << std::endl << std::endl;
+
+
+				std::cout << " _  _  _  _  __ _  ____  __  ____    __     __     ____  __     __  ____  __" << std::endl;
+				std::cout << "/ )( \\/ )( \\(  ( \\(    \\(  )(  _ \\  (  )   / _\\   (  __)(  )   /  \\(_  _)/ _\\ " << std::endl;
+				std::cout << ") __ () \\/ (/    / ) D ( )(  )   /  / (_/\\/    \\   ) _) / (_/\\(  O ) )( /    \\ " << std::endl;
+				std::cout << "\\_)(_/\\____/\\_)__)(____/(__)(__\\_)  \\____/\\_/\\_/  (__)  \\____/ \\__/ (__)_/\\_/" << std::endl << std::endl;
+
+
+				std::cout << "                                 (el juego)" << std::endl << std::endl;
+
+
+				std::cout << "                               PAGINA INICIAL" << std::endl;
+
+				std::cout << "1) Jugar (valores predeterminados)." << std::endl;
+				std::cout << "2) Configuracion." << std::endl;
 			}
 		}
 		else if (opcionPaginaPrincipal == '2')
@@ -883,30 +1068,9 @@ int main() {
 
 		}
 	}
-	
 
 
-
-
-	
-
-
-
-	std::cout << std::endl;
-
-	// Detenemos la ejecución del programa hasta que se presione una tecla
-	system("pause");
-
-
-
-
-
-
-
-
-
-
-	system("cls");
+	/*system("cls");
 
 	// Imprimimos los dos tableros.
 	std::cout << "TABLERO JUGADOR 1:" << std::endl;
@@ -938,7 +1102,7 @@ int main() {
 	std::cout << std::endl;
 
 	// Detenemos la ejecución del programa hasta que se presione una tecla
-	system("pause");
+	system("pause");*/
 
 #pragma region gameplay
 
