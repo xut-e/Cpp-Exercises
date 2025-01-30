@@ -1088,12 +1088,14 @@ int main() {
 
 				if (opcionPaginaConfiguracion == '1')
 				{
-					std::cout << "                   MODIFICACION DE BARCOS" << std::endl << std::endl;
+					system("cls");
+					std::cout << "                      MODIFICACION DE BARCOS" << std::endl << std::endl;
 
 					std::cout << "En esta pagina puedes modificar la cantidad de barcos que habra." << std::endl;
 					std::cout << "Ten en cuenta que un numero elevado de barcos para un tablero extremadamente pequenyo puede hacer que el juego falle." << std::endl;
 					std::cout << "Es por esto que el minimo de barcos a colocar seran 2 y el tamanyo minimo de estos sera de 2." << std::endl;
 					std::cout << "Asimismo el maximo de barcos a colocar sera 8 y el tamanyo maximo sera 10." << std::endl;
+					std::cout << "Ademas, tendras que tener minimo dos barcos." << std::endl;
 					std::cout << "Por defecto tendras un barco de tamanyo 3, uno de 4, otro de 5 y otro de 6." << std::endl << std::endl;
 					std::cout << "Recomendamos encarecidamente que en caso de modificar el tamanyo a uno mayor, uses la opcion de colocacion aleatoria." << std::endl << std::endl;
 					std::cout << "Cual deseas que sea el tamanyo mas pequenyo de los barcos?: ";
@@ -1101,14 +1103,24 @@ int main() {
 					{
 						std::cin >> barcoPequenyoModificado;
 
-						if (barcoPequenyoModificado < 2)
+						if (barcoPequenyoModificado < 2 || barcoPequenyoModificado > 9)
 						{
 							system("cls");
+
+							std::cout << "                      MODIFICACION DE BARCOS" << std::endl << std::endl;
+
+							std::cout << "En esta pagina puedes modificar la cantidad de barcos que habra." << std::endl;
+							std::cout << "Ten en cuenta que un numero elevado de barcos para un tablero extremadamente pequenyo puede hacer que el juego falle." << std::endl;
+							std::cout << "Es por esto que el minimo de barcos a colocar seran 2 y el tamanyo minimo de estos sera de 2." << std::endl;
+							std::cout << "Asimismo el maximo de barcos a colocar sera 8 y el tamanyo maximo sera 10." << std::endl;
+							std::cout << "Ademas, tendras que tener minimo dos barcos." << std::endl;
+							std::cout << "Por defecto tendras un barco de tamanyo 3, uno de 4, otro de 5 y otro de 6." << std::endl << std::endl;
+							std::cout << "Recomendamos encarecidamente que en caso de modificar el tamanyo a uno mayor, uses la opcion de colocacion aleatoria." << std::endl << std::endl;
 
 							std::cout << "Ese numero no es valido." << std::endl << std::endl;
 							std::cout << "Cual deseas que sea el tamanyo mas pequenyo de los barcos?: ";
 						}
-					} while (barcoPequenyoModificado < 2);
+					} while (barcoPequenyoModificado < 2 || barcoPequenyoModificado > 9);
 					
 					barcoMasPequenyo = barcoPequenyoModificado;
 
@@ -1125,14 +1137,24 @@ int main() {
 							contador++;
 						}
 
-						if (barcoGrandeModificado > 10 || contador > 8)
+						if (barcoGrandeModificado > 9 || contador > 8 || contador < 2)
 						{
 							system("cls");
+
+							std::cout << "                      MODIFICACION DE BARCOS" << std::endl << std::endl;
+
+							std::cout << "En esta pagina puedes modificar la cantidad de barcos que habra." << std::endl;
+							std::cout << "Ten en cuenta que un numero elevado de barcos para un tablero extremadamente pequenyo puede hacer que el juego falle." << std::endl;
+							std::cout << "Es por esto que el minimo de barcos a colocar seran 2 y el tamanyo minimo de estos sera de 2." << std::endl;
+							std::cout << "Asimismo el maximo de barcos a colocar sera 8 y el tamanyo maximo sera 9." << std::endl;
+							std::cout << "Ademas, tendras que tener minimo dos barcos." << std::endl;
+							std::cout << "Por defecto tendras un barco de tamanyo 3, uno de 4, otro de 5 y otro de 6." << std::endl << std::endl;
+							std::cout << "Recomendamos encarecidamente que en caso de modificar el tamanyo a uno mayor, uses la opcion de colocacion aleatoria." << std::endl << std::endl;
 
 							std::cout << "Ese numero no es valido." << std::endl << std::endl;
 							std::cout << "Cual deseas que sea el tamanyo mas grande de los barcos?: ";
 						}
-					} while (barcoGrandeModificado > 10 || contador > 8);
+					} while (barcoGrandeModificado > 9 || contador > 8 || contador < 2);
 					
 					barcoMasGrande = barcoGrandeModificado;
 				}
