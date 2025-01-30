@@ -1,3 +1,4 @@
+#pragma region enunciado
 /* Hundir la Flota
  La siguiente práctica pretende que el alumno desarrolle una réplica del
  juego de tablero Hundir la Flota para ordenador con tal de que demuestre los
@@ -43,17 +44,16 @@
  ● Sinpresentar graves errores de rendimiento.
 
   */
+#pragma endregion
 
 #include <iostream>
 #include <time.h>
 #include <Windows.h>
 
-#define FILAS 10
-#define COLUMNAS 10
-
 int main() {
+	int const FILAS = 10, COLUMNAS = 10;
 	char tableroJugador1[FILAS][COLUMNAS], tableroJugador2[FILAS][COLUMNAS], tableroGameplayJugador1[FILAS][COLUMNAS], tableroGameplayJugador2[FILAS][COLUMNAS];
-	int cantidadOsJugador1 = 0, cantidadOsJugador2 = 0, barcoMasPequenyo = 3, barcoMasGrande = 6;
+	int cantidadOsJugador1 = 0, cantidadOsJugador2 = 0, barcoMasPequenyo = 3, barcoMasGrande = 6, barcoPequenyoModificado, barcoGrandeModificado;
 	int fila, columna, cantidadOsTotal = 0, contadorTurno = 0;
 	char opcionPaginaPrincipal, opcionPaginaConfiguracion, opcionPaginaBarcos;
 	bool todoListo = false;
@@ -86,7 +86,7 @@ int main() {
 	{
 		do
 		{
-			std::cout << "Seleccione una opcion1: ";
+			std::cout << "Seleccione una opcion: ";
 			std::cin >> opcionPaginaPrincipal;
 
 			if (opcionPaginaPrincipal != '1' && opcionPaginaPrincipal != '2')
@@ -107,7 +107,7 @@ int main() {
 
 			do
 			{
-				std::cout << "Seleccione una opcion2: ";
+				std::cout << "Seleccione una opcion: ";
 				std::cin >> opcionPaginaBarcos;
 
 				if (opcionPaginaBarcos != '1' && opcionPaginaBarcos != '2' && opcionPaginaBarcos != '3')
@@ -662,7 +662,7 @@ int main() {
 
 									do
 									{
-										std::cout << "Seleccione una opcion3: ";
+										std::cout << "Seleccione una opcion: ";
 										std::cin >> direccionColocar;
 
 										if (direccionColocar != 1 && direccionColocar != 2 && direccionColocar != 3 && direccionColocar != 4)
@@ -924,7 +924,7 @@ int main() {
 
 									do
 									{
-										std::cout << "Seleccione una opcion3: ";
+										std::cout << "Seleccione una opcion: ";
 										std::cin >> direccionColocar;
 
 										if (direccionColocar != 1 && direccionColocar != 2 && direccionColocar != 3 && direccionColocar != 4)
@@ -1065,44 +1065,104 @@ int main() {
 		}
 		else if (opcionPaginaPrincipal == '2')
 		{
+			do
+			{
+				system("cls");
 
+				std::cout << "                       MENU DE CONFIGURACION" << std::endl << std::endl;
+
+				std::cout << "1) Modificar barcos." << std::endl;
+				std::cout << "2) Volver a la pagina de inicio." << std::endl;
+
+				do
+				{
+					std::cout << "Seleccione una opcion: ";
+
+					std::cin >> opcionPaginaConfiguracion;
+
+					if (opcionPaginaConfiguracion != '1' && opcionPaginaConfiguracion != '2' && opcionPaginaConfiguracion != '3')
+					{
+						std::cout << "Esa opcion no es valida." << std::endl;
+					}
+				} while (opcionPaginaConfiguracion != '1' && opcionPaginaConfiguracion != '2' && opcionPaginaConfiguracion != '3');
+
+				if (opcionPaginaConfiguracion == '1')
+				{
+					std::cout << "                   MODIFICACION DE BARCOS" << std::endl << std::endl;
+
+					std::cout << "En esta pagina puedes modificar la cantidad de barcos que habra." << std::endl;
+					std::cout << "Ten en cuenta que un numero elevado de barcos para un tablero extremadamente pequenyo puede hacer que el juego falle." << std::endl;
+					std::cout << "Es por esto que el minimo de barcos a colocar seran 2 y el tamanyo minimo de estos sera de 2." << std::endl;
+					std::cout << "Asimismo el maximo de barcos a colocar sera 8 y el tamanyo maximo sera 10." << std::endl;
+					std::cout << "Por defecto tendras un barco de tamanyo 3, uno de 4, otro de 5 y otro de 6." << std::endl << std::endl;
+					std::cout << "Recomendamos encarecidamente que en caso de modificar el tamanyo a uno mayor, uses la opcion de colocacion aleatoria." << std::endl << std::endl;
+					std::cout << "Cual deseas que sea el tamanyo mas pequenyo de los barcos?: ";
+					do
+					{
+						std::cin >> barcoPequenyoModificado;
+
+						if (barcoPequenyoModificado < 2)
+						{
+							system("cls");
+
+							std::cout << "Ese numero no es valido." << std::endl << std::endl;
+							std::cout << "Cual deseas que sea el tamanyo mas pequenyo de los barcos?: ";
+						}
+					} while (barcoPequenyoModificado < 2);
+					
+					barcoMasPequenyo = barcoPequenyoModificado;
+
+					std::cout << "Cual deseas que sea el tamanyo mas grande de los barcos?: ";
+
+					int contador = 0;
+					do
+					{
+						contador = 0;
+
+						std::cin >> barcoGrandeModificado;
+						for (int j = barcoPequenyoModificado; j <= barcoGrandeModificado; j++)
+						{
+							contador++;
+						}
+
+						if (barcoGrandeModificado > 10 || contador > 8)
+						{
+							system("cls");
+
+							std::cout << "Ese numero no es valido." << std::endl << std::endl;
+							std::cout << "Cual deseas que sea el tamanyo mas grande de los barcos?: ";
+						}
+					} while (barcoGrandeModificado > 10 || contador > 8);
+					
+					barcoMasGrande = barcoGrandeModificado;
+				}
+				else if (opcionPaginaConfiguracion == '2')
+				{
+					todoListo = false;
+					system("cls");
+
+					std::cout << "                                Bienvenido a" << std::endl << std::endl;
+
+
+					std::cout << " _  _  _  _  __ _  ____  __  ____    __     __     ____  __     __  ____  __" << std::endl;
+					std::cout << "/ )( \\/ )( \\(  ( \\(    \\(  )(  _ \\  (  )   / _\\   (  __)(  )   /  \\(_  _)/ _\\ " << std::endl;
+					std::cout << ") __ () \\/ (/    / ) D ( )(  )   /  / (_/\\/    \\   ) _) / (_/\\(  O ) )( /    \\ " << std::endl;
+					std::cout << "\\_)(_/\\____/\\_)__)(____/(__)(__\\_)  \\____/\\_/\\_/  (__)  \\____/ \\__/ (__)_/\\_/" << std::endl << std::endl;
+
+
+					std::cout << "                                 (el juego)" << std::endl << std::endl;
+
+
+					std::cout << "                               PAGINA INICIAL" << std::endl;
+
+					std::cout << "1) Jugar (valores predeterminados)." << std::endl;
+
+					std::cout << "2) Configuracion." << std::endl;
+				}
+			} while (opcionPaginaConfiguracion != '2');
+			
 		}
 	}
-
-
-	/*system("cls");
-
-	// Imprimimos los dos tableros.
-	std::cout << "TABLERO JUGADOR 1:" << std::endl;
-
-	for (int i = 0; i < FILAS; i++)
-	{
-		for (int j = 0; j < COLUMNAS; j++)
-		{
-			std::cout << " " << tableroJugador1[i][j];
-
-		}
-		std::cout << std::endl;
-	}
-
-	std::cout << std::endl;
-
-	std::cout << "TABLERO JUGADOR 2:" << std::endl;
-
-	for (int i = 0; i < FILAS; i++)
-	{
-		for (int j = 0; j < COLUMNAS; j++)
-		{
-			std::cout << " " << tableroJugador2[i][j];
-
-		}
-		std::cout << std::endl;
-	}
-
-	std::cout << std::endl;
-
-	// Detenemos la ejecución del programa hasta que se presione una tecla
-	system("pause");*/
 
 #pragma region gameplay
 
@@ -1338,4 +1398,3 @@ int main() {
 
 	return 0;
 }
-
