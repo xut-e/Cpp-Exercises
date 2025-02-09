@@ -41,7 +41,7 @@ void main() {
 
 	for (int i = 0; i < times; i++)
 	{
-		std::cout << vector[i];
+		std::cout << vectorCopiado[i];
 
 		if (i < times - 1)
 		{

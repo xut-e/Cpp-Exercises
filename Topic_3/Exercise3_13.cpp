@@ -1,4 +1,4 @@
-// 13. Consulta la página oficial de C++ y mira cómo funciona la funcionalidad de random.Intenta generar un valor numérico aleatorio entre 10 y 1, 000.
+// 13. Consulta la página oficial de C++ y mira cómo funciona la funcionalidad de random.Intenta generar un valor numérico aleatorio entre 10 y 1000.
 
 #include <iostream>
 #include <time.h>
