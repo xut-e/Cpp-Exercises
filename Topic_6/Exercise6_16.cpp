@@ -8,6 +8,7 @@
  int main() {
      std::string fecha1, fecha2, anyo1, mes1, dia1, anyo2, mes2, dia2;
      bool fechaValida;
+     int dias = 0;
  
      std::cout << "Introduce fechas en el siguiente formato: YYYY-MM-DD" << std::endl;
      
@@ -90,61 +91,169 @@
      int anyo1int = std::stoi(anyo1), anyo2int = std::stoi(anyo2), mes1int = std::stoi(mes1), mes2int = std::stoi(mes2), dia1int = std::stoi(dia1), dia2int = std::stoi(dia2);
      int anyoMenor = anyo1int < anyo2int ? anyo1int : anyo2int;
      int anyoMayor = anyo1int > anyo2int ? anyo1int : anyo2int;
-     int mesMenor = anyoMenor == anyo1int ? mesMenor = mes1int : mesMenor = mes2int;
+     int mesMenor = (anyoMenor == anyo1int) ? mes1int : mes2int;
      int mesMayor = anyoMayor == anyo1int ? mesMayor = mes1int : mesMayor = mes2int;
      int diaMenor = anyoMenor == anyo1int ? diaMenor = dia1int : diaMenor = dia2int;
      int diaMayor = anyoMayor == anyo1int ? diaMayor = dia1int : diaMayor = dia2int;
  
+     std::cout << anyoMenor << " " << mesMenor << " " << diaMenor << std::endl;
+     std::cout << anyoMayor << " " << mesMayor << " " << diaMayor << std::endl;
      
-     /*
-     
-     if (anyo1 > anyo2)
+     for (int k = diaMenor; k <= diaMayor; k++)
      {
- 
-     }
-     else if (anyo1 < anyo2)
-     {
- 
-     }
-     else
-     {
-         if (mes1 > mes2)
+         if (mesMenor % 2 == 0 && mesMenor != 2 && mesMenor <= 6)
          {
- 
-         }
-         else if (mes1 < mes2)
-         {
- 
-         }
-         else
-         {
-             if (dia1 > dia2)
+             if (k == 30)
              {
- 
-             }
-             else if (dia1 < dia2)
-             {
- 
+                 diaMenor = 1;
+                 mesMenor++;
+                 if (mesMenor < 12)
+                 {
+                     mesMenor = 1;
+                     anyoMenor++;
+                 }
+                 dias++;
              }
              else
              {
-                 std::cout << "Hay 0 dias de diferencia entre las fechas." << std::endl;
+                 dias++;
              }
          }
-     }
- 
-     */
- 
-     for (int i = anyoMenor; i < anyoMayor; i++)
-     {
-         for (int j = mesMenor; j < mesMayor; j++)
+         else if (mesMenor % 2 == 0 && mesMenor > 6)
          {
-             for (int k = diaMenor; k < diaMayor; k++)
+             if (k == 31)
              {
- 
+                 diaMenor = 1;
+                 mesMenor++;
+                 if (mesMenor < 12)
+                 {
+                     mesMenor = 1;
+                     anyoMenor++;
+                 }
+                 dias++;
+             }
+             else
+             {
+                 dias++;
+             }
+         }
+         else if (mesMenor % 2 != 0 && mesMenor <= 6)
+         {
+             if (k == 31)
+             {
+                 diaMenor = 1;
+                 mesMenor++;
+                 if (mesMenor < 12)
+                 {
+                     mesMenor = 1;
+                     anyoMenor++;
+                 }
+                 dias++;
+             }
+             else
+             {
+                 dias++;
+             }
+         }
+         else if (mesMenor % 2 != 0 && mesMenor > 6)
+         {
+             if (k == 30)
+             {
+                 diaMenor = 1;
+                 mesMenor++;
+                 if (mesMenor < 12)
+                 {
+                     mesMenor = 1;
+                     anyoMenor++;
+                 }
+                 dias++;
+             }
+             else
+             {
+                 dias++;
+             }
+         }
+         else
+         {
+             if (anyoMenor % 4 == 0 && k == 29)
+             {
+                 diaMenor = 1;
+                 mesMenor++;
+                 if (mesMenor < 12)
+                 {
+                     mesMenor = 1;
+                     anyoMenor++;
+                 }
+                 dias++;
+             }
+             else if (anyoMenor % 4 != 0 && k == 28)
+             {
+                 diaMenor = 1;
+                 mesMenor++;
+                 if (mesMenor < 12)
+                 {
+                     mesMenor = 1;
+                     anyoMenor++;
+                 }
+                 dias++;
+             }
+             else
+             {
+                 dias++;
              }
          }
      }
+ 
+     for (int j = mesMenor; j <= mesMayor; j++)
+     {
+         if (j % 2 == 0 && j <= 6 && j != 2)
+         {
+             dias += 30;
+         }
+         else if (j % 2 == 0 && j > 6)
+         {
+             if (j == 12)
+             {
+                 dias += 31;
+                 mesMenor = 1;
+                 anyoMenor++;
+             }
+             
+         }
+         else if (j % 2 != 0 && j <= 6)
+         {
+             dias += 31;
+         }
+         else if (j % 2 != 0 && j > 6)
+         {
+             dias += 30;
+         }
+         else
+         {
+             if (anyoMenor % 4 == 0)
+             {
+                 dias += 29;
+             }
+             else
+             {
+                 dias += 28;
+             }
+         }
+     }
+     for (int i = anyoMenor; i <= anyoMayor; i++)
+     {
+         if (i % 4 == 0)
+         {
+             dias += 366;
+         }
+         else
+         {
+             dias += 365;
+         }
+     }
+     
+ 
+     std::cout << "La cantidad total de dias es de " << dias << std::endl;
  
      return 0;
      
