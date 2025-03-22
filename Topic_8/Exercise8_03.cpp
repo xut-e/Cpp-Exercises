@@ -38,7 +38,9 @@
  
  void jugar(std::vector<int>& rango) {
  
-     elegirNumeroAleatorio(rango);
+     int numeroAleatorio = elegirNumeroAleatorio(rango);
+ 
+ 
  }
  
  int main() {
