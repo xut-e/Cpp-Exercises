@@ -23,26 +23,75 @@ El programa selecciona aleatoriamente una palabra de una lista predefinida.
          return palabraSeleccionada;
  }
  
- std::string palabraAAdivinarForma(std::string palabraAAdivinar) {
+ std::vector<char> inicializarFormaPalabra(std::string palabraAAdivinar) {
+     std::vector<char> formaPalabraAAdivinar;
  
+     for (size_t i = 0; i < palabraAAdivinar.size(); i++)
+     {
+         formaPalabraAAdivinar.push_back('_');
+     }
+ 
+     return formaPalabraAAdivinar;
  }
  
  bool palabraAdivinada() {
-     std::vector<char> formaPalabraAAdivinar;
+     
      
  }
  
- void jugar(std::string palabraAAdivinar) {
-     int intentos = 0;
- 
-     palabraAAdivinarForma(palabraAAdivinar);
- 
-     while (intentos < palabraAAdivinar.size() || !palabraAdivinada())
+ bool letraIntentada(std::vector<char> listaLetrasIntentadas, char letraIntroducida) {
+     for (size_t i = 0; i < listaLetrasIntentadas.size(); i++)
      {
-         palabraAAdivinarForma(palabraAAdivinar);
-         intentos++;
+         if (letraIntroducida == listaLetrasIntentadas[i])
+         {
+             return true;
+             break;
+         }
      }
+ 
+     return false;
+ }
+ 
+ void jugar(std::string palabraAAdivinar) {
+     int intentos = 0, turno = 1;
+     std::vector<char> palabraMostrarAlUsuario = inicializarFormaPalabra(palabraAAdivinar), letrasIntentadas = {};
+     char letraIntroducida;
      
+     while (intentos < palabraAAdivinar.size() && !palabraAdivinada())
+     {
+         std::cout << "Turno: " << turno << std::endl;
+         std::cout << "Palabra: ";
+ 
+         for (size_t i = 0; i < palabraMostrarAlUsuario.size(); i++)
+         {
+             std::cout << palabraMostrarAlUsuario[i] << " ";
+         }
+         std::cout << std::endl;
+ 
+         std::cout << "Letras intentadas: ";
+ 
+         for (size_t i = 0; i < letrasIntentadas.size(); i++)
+         {
+             std::cout << letrasIntentadas[i];
+ 
+             if (i < letrasIntentadas.size() - 1)
+             {
+                 std::cout << ", ";
+             }
+         }
+         std::cout << std::endl;
+ 
+         std::cout << "Intentos restantes: " << palabraMostrarAlUsuario.size() - intentos << std::endl;
+ 
+         std::cout << "Introduce una letra: ";
+ 
+         do
+         {
+             std::cin >> letraIntroducida;
+         } while (!letraIntentada(letrasIntentadas, letraIntroducida));
+ 
+ 
+     }
  }
  
  int main() {
