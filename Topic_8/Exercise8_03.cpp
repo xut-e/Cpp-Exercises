@@ -36,9 +36,45 @@
      return rango[0] + rand() % (rango[1] - rango[0] + 1);
  }
  
- void jugar(std::vector<int>& rango) {
+ int mayorMenorIgual(int numeroAleatorio, int numeroUsuario) {
+     if (numeroUsuario < numeroAleatorio)
+     {
+         return 0;
+     }
+     else if (numeroUsuario > numeroAleatorio)
+     {
+         return 2;
+     }
+     else
+     {
+         return 1;
+     }
+ }
  
-     int numeroAleatorio = elegirNumeroAleatorio(rango);
+ void jugar(std::vector<int>& rango) {
+     int numeroAleatorio = elegirNumeroAleatorio(rango), numeroUsuario, respuesta;
+ 
+     do
+     {
+         std::cout << "Introduce un numero para adivinar: ";
+         std::cin >> numeroUsuario;
+ 
+         respuesta = mayorMenorIgual(numeroAleatorio, numeroUsuario);
+ 
+         if (respuesta == 0)
+         {
+             std::cout << "El numero que has introducido es menor!" << std::endl;
+         }
+         else if (respuesta == 1)
+         {
+             std::cout << "Has acertado el numero, enhorabuena!" << std::endl;
+         }
+         else if (respuesta == 2)
+         {
+             std::cout << "El numero que has introducido es mayor!" << std::endl;
+         }
+     } while (respuesta != 1);
+     
  
  
  }
