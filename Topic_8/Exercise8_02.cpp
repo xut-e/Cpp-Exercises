@@ -19,10 +19,13 @@
  #define JUGADORES 2
  #define JUGADOR_1 0
  #define JUGADOR_2 1
+ #define ESPERA_DESPUES_DE_DADO 500
+ #define ESPERA_DESPUES_DE_TELETRANPORTE 2000
  
  #include <iostream>
  #include <time.h>
  #include <vector>
+ #include <Windows.h>
  
  struct CasillasConectadas {
      const int casilla1;
@@ -43,7 +46,7 @@
  
  std::vector<CasillasConectadas> inicializarListaCasillasTeletransporte() {
      return {
-         {1, 12},
+         {7, 12},
          {19, 24},
          {31, 40}
      };
@@ -53,9 +56,13 @@
      return {3, 13, 23, 33, 43};
  }
  
- void mostrarTablero(std::vector<Jugadores>& jugadores) {
+ void mostrarTablero(std::vector<Jugadores>& jugadores, time_t idTurno) {
+ 
+     system("cls");
  
      std::vector<std::string> tablero;
+ 
+     std::cout << "TURNO DEL JUGADOR " << idTurno + 1 << std::endl;
  
      for (int i = 0; i < JUGADORES; i++)
      {
@@ -95,18 +102,13 @@
  bool objetoAleatorio(int idJugador, std::vector<Jugadores>& jugadores, std::vector<ObjetosAleatorios> listaObjetos) {
      int opcion;
  
-     if (jugadores[idJugador].tieneObjeto)
+     if (jugadores[idJugador].tieneObjeto && jugadores[idJugador].idObjeto >= 0)
      {
-         if (jugadores[idJugador].idObjeto == -1)
-         {
-             return false;
-         }
- 
          std::cout << "Posees un objeto: " << listaObjetos[jugadores[idJugador].idObjeto].breveDescripcion << std::endl;
          std::cout << "Deseas utilizarlo?" << std::endl;
          std::cout << "\t" << "1) Si." << std::endl;
          std::cout << "\t" << "2) No." << std::endl;
-         std::cout << "Elige una opcion: " << std::endl;
+         std::cout << "Elige una opcion: ";
          do
          {
              std::cin >> opcion;
@@ -122,16 +124,15 @@
  }
  
  int tirarDado() {
- 
+     return rand() % 6 + 1;
  }
  
  int objetoUno() {
-     int sumaTotal;
+     int dadoExtra = 0;
  
-     sumaTotal += tirarDado();
-     sumaTotal += tirarDado();
+     dadoExtra += tirarDado();
  
-     return sumaTotal;
+     return dadoExtra;
  }
  
  int objetoDos(int idJugadorActual) {
@@ -151,7 +152,51 @@
      return opcion;
  }
  
+ std::vector<Jugadores> avanzar(int idJugador, std::vector<Jugadores>& datosJugadores) {
  
+     std::cout << "Tira el dado!" << std::endl;
+     system("pause");
+ 
+     int numeroAvanzar = tirarDado();
+ 
+     std::cout << "Ha salido un " << numeroAvanzar << "!" << std::endl;
+     Sleep(ESPERA_DESPUES_DE_DADO);
+ 
+     datosJugadores[idJugador].posicion += numeroAvanzar;
+ 
+     return datosJugadores;
+ }
+ 
+ std::vector<Jugadores> retrocederEnemigo(int idEnemigo, std::vector<Jugadores>& datosJugadores) {
+ 
+     std::cout << "Tira el dado!" << std::endl;
+     system("pause");
+ 
+     int numeroRetrocederEnemigo = tirarDado();
+     
+     datosJugadores[idEnemigo].posicion -= numeroRetrocederEnemigo;
+ 
+     if (datosJugadores[idEnemigo].posicion < 1)
+     {
+         datosJugadores[idEnemigo].posicion = 1;
+     }
+ 
+     std::cout << "Ha salido un " << numeroRetrocederEnemigo << ". Tu enemigo retrocede hasta la casilla: " << datosJugadores[idEnemigo].posicion << std::endl;
+ 
+     return datosJugadores;
+ }
+ 
+ bool comprobarGanador(std::vector<Jugadores> datosJugadores) {
+     if (datosJugadores[JUGADOR_1].posicion >= MAX_CASILLAS || datosJugadores[JUGADOR_2].posicion >= MAX_CASILLAS)
+     {
+         return true;
+     }
+     else
+     {
+         return false;
+     }
+     
+ }
  
  void jugar() {
      srand(time(0));
@@ -166,15 +211,15 @@
  
      std::vector<int> liscaCasillasObjetos = inicializarCasillasObjetos();
  
-     while (!( datosJugadores[JUGADOR_1].posicion == MAX_CASILLAS || datosJugadores[JUGADOR_2].posicion == MAX_CASILLAS))
+     while (!(datosJugadores[JUGADOR_1].posicion >= MAX_CASILLAS || datosJugadores[JUGADOR_2].posicion >= MAX_CASILLAS))
      {
          for (int i = 0; i < JUGADORES; i++)
          {
-             int avanzar;
+             int numeroAvanzar;
  
-             std::cout << "TURNO DEL JUGADOR " << i + 1;
+             std::cout << "TURNO DEL JUGADOR " << i + 1 << std::endl;
  
-             mostrarTablero(datosJugadores);
+             mostrarTablero(datosJugadores, i);
  
              utilizarObjeto = objetoAleatorio(i, datosJugadores, listaObjetos);
  
@@ -182,40 +227,106 @@
              {
                  if (datosJugadores[i].idObjeto == 1)
                  {
-                     avanzar = objetoUno();
+                     numeroAvanzar = objetoUno();
+ 
+                     std::cout << "Tu objeto te avanza " << numeroAvanzar << " casillas." << std::endl;
+                     Sleep(ESPERA_DESPUES_DE_DADO);
+                     mostrarTablero(datosJugadores, i);
                  }
                  else if (datosJugadores[i].idObjeto == 2)
                  {
-                     int enemigo;
+                     int enemigo = (i == JUGADOR_1) ? JUGADOR_2 : JUGADOR_1;
  
-                     if (datosJugadores[i].identificador == JUGADOR_1)
-                     {
-                         enemigo = JUGADOR_2;
-                     }
-                     else if (datosJugadores[i].identificador == JUGADOR_2)
-                     {
-                         enemigo = JUGADOR_1;
-                     }
+                     retrocederEnemigo(enemigo, datosJugadores);
  
-                     int retrocederEnemigo = objetoDos(datosJugadores[enemigo].identificador);
+                     avanzar(i, datosJugadores);
  
-                     avanzar = tirarDado();
+ 
+ 
                  }
                  else if (datosJugadores[i].idObjeto == 3)
                  {
-                     avanzar = objetoTres();
+                     numeroAvanzar = objetoTres();
+                 }
+ 
+                 datosJugadores[i].tieneObjeto = false;
+                 datosJugadores[i].idObjeto = -1;
+             }
+             std::cout << "Tira el dado!" << std::endl;
+             system("pause");
+             numeroAvanzar = tirarDado();
+ 
+             std::cout << "Ha salido un " << numeroAvanzar << "!" << std::endl;
+             Sleep(ESPERA_DESPUES_DE_DADO);
+             datosJugadores[i].posicion += numeroAvanzar;
+             mostrarTablero(datosJugadores, i);
+ 
+             if (datosJugadores[i].posicion % 5 == 0 && datosJugadores[i].posicion != MAX_CASILLAS)
+             {
+                 std::cout << "Tienes un turno extra." << std::endl;
+                 std::cout << "Tira el dado!" << std::endl;
+                 system("pause");
+ 
+                 numeroAvanzar = tirarDado();
+ 
+                 std::cout << "Ha salido un " << numeroAvanzar << "!" << std::endl;
+                 Sleep(ESPERA_DESPUES_DE_DADO);
+                 datosJugadores[i].posicion += numeroAvanzar;
+                 mostrarTablero(datosJugadores, i);
+             }
+ 
+             for (size_t j = 0; j < liscaCasillasObjetos.size(); j++)
+             {
+                 if (datosJugadores[i].posicion == liscaCasillasObjetos[j] && (!datosJugadores[i].tieneObjeto && datosJugadores[i].idObjeto == -1))
+                 {
+                     int objetoEscogido = rand() % listaObjetos.size();
+ 
+                     std::cout << "Te has encontrado con un objeto random, te ha tocado: " << listaObjetos[objetoEscogido].breveDescripcion << std::endl;
+ 
+                     datosJugadores[i].tieneObjeto = true;
+                     datosJugadores[i].idObjeto = objetoEscogido;
+                     break;
+                 }
+             }
+             
+             for (size_t j = 0; j < casillasTeletransporte.size(); j++)
+             {
+                 if (datosJugadores[i].posicion == casillasTeletransporte[j].casilla1)
+                 {
+                     std::cout << "Has caido en la casilla " << casillasTeletransporte[j].casilla1 << ". Avanzas hasta la casilla " << casillasTeletransporte[j].casilla2 << std::endl;
+                     Sleep(ESPERA_DESPUES_DE_TELETRANPORTE);
+                     datosJugadores[i].posicion = casillasTeletransporte[j].casilla2;
+                     mostrarTablero(datosJugadores, i);
+                     break;
+                 }
+                 else if (datosJugadores[i].posicion == casillasTeletransporte[j].casilla2)
+                 {
+                     std::cout << "Has caido en la casilla " << casillasTeletransporte[j].casilla2 << ". Retrocedes hasta la casilla " << casillasTeletransporte[j].casilla1 << std::endl;
+                     Sleep(ESPERA_DESPUES_DE_TELETRANPORTE);
+                     datosJugadores[i].posicion = casillasTeletransporte[j].casilla1;
+                     mostrarTablero(datosJugadores, i);
+                     break;
                  }
              }
  
-             avanzar = tirarDado();
+             if (comprobarGanador(datosJugadores))
+             {
+                 break;
+             }
+ 
+             std::cout << "Presiona cualquier tecla para avanzar de turno." << std::endl;
+             system("pause");
+             system("cls");
+ 
+             
          }
      }
  
-     if (datosJugadores[JUGADOR_1].posicion == MAX_CASILLAS)
+     if (datosJugadores[JUGADOR_1].posicion >= MAX_CASILLAS)
      {
          std::cout << "El jugador 1 gana!" << std::endl;
      }
-     else if (datosJugadores[JUGADOR_2].posicion == MAX_CASILLAS)
+     else if (datosJugadores[JUGADOR_2].posicion >= MAX_CASILLAS)
      {
          std::cout << "El jugador 2 gana!" << std::endl;
      }
