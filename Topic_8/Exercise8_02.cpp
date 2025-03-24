@@ -20,7 +20,7 @@
  #define JUGADOR_1 0
  #define JUGADOR_2 1
  #define ESPERA_DESPUES_DE_DADO 500
- #define ESPERA_DESPUES_DE_TELETRANPORTE 2000
+ #define ESPERA_DESPUES_DE_TELETRANSPORTE 2000
  
  #include <iostream>
  #include <time.h>
@@ -93,9 +93,9 @@
  
  std::vector<ObjetosAleatorios> inicializarObjetosAleatorios() {
      return {
-         {1, "Dado adicional: Tira dos dados esta ronda."},
-         {2, "Retrocede enemigo: Tira un dado para ello (no aplican casillas especiales)"},
-         {3, "Avance manual: Avanza entre 1 y 3 casillas."}
+         {0, "Dado adicional: Tira dos dados esta ronda."},
+         {1, "Retrocede enemigo: Tira un dado para ello (no aplican casillas especiales)"},
+         {2, "Avance manual: Avanza entre 1 y 3 casillas."}
      };
  }
  
@@ -128,9 +128,9 @@
  }
  
  int objetoUno() {
-     int dadoExtra = 0;
+     int dadoExtra;
  
-     dadoExtra += tirarDado();
+     dadoExtra = tirarDado();
  
      return dadoExtra;
  }
@@ -225,28 +225,36 @@
  
              if (utilizarObjeto)
              {
-                 if (datosJugadores[i].idObjeto == 1)
+                 if (datosJugadores[i].idObjeto == 0)
                  {
                      numeroAvanzar = objetoUno();
- 
+                     
                      std::cout << "Tu objeto te avanza " << numeroAvanzar << " casillas." << std::endl;
-                     Sleep(ESPERA_DESPUES_DE_DADO);
+                     datosJugadores[i].posicion += numeroAvanzar; 
+                     Sleep(ESPERA_DESPUES_DE_TELETRANSPORTE);
                      mostrarTablero(datosJugadores, i);
                  }
-                 else if (datosJugadores[i].idObjeto == 2)
+                 else if (datosJugadores[i].idObjeto == 1)
                  {
                      int enemigo = (i == JUGADOR_1) ? JUGADOR_2 : JUGADOR_1;
  
                      retrocederEnemigo(enemigo, datosJugadores);
  
+                     Sleep(ESPERA_DESPUES_DE_TELETRANSPORTE);
+                     mostrarTablero(datosJugadores, i);
+ 
                      avanzar(i, datosJugadores);
  
- 
- 
                  }
-                 else if (datosJugadores[i].idObjeto == 3)
+                 else if (datosJugadores[i].idObjeto == 2)
                  {
                      numeroAvanzar = objetoTres();
+ 
+                     std::cout << "Has avanzado " << numeroAvanzar << " casillas." << std::endl;
+                     datosJugadores[i].posicion += numeroAvanzar;
+ 
+                     Sleep(ESPERA_DESPUES_DE_TELETRANSPORTE);
+                     mostrarTablero(datosJugadores, i);
                  }
  
                  datosJugadores[i].tieneObjeto = false;
@@ -294,7 +302,7 @@
                  if (datosJugadores[i].posicion == casillasTeletransporte[j].casilla1)
                  {
                      std::cout << "Has caido en la casilla " << casillasTeletransporte[j].casilla1 << ". Avanzas hasta la casilla " << casillasTeletransporte[j].casilla2 << std::endl;
-                     Sleep(ESPERA_DESPUES_DE_TELETRANPORTE);
+                     Sleep(ESPERA_DESPUES_DE_TELETRANSPORTE);
                      datosJugadores[i].posicion = casillasTeletransporte[j].casilla2;
                      mostrarTablero(datosJugadores, i);
                      break;
@@ -302,7 +310,7 @@
                  else if (datosJugadores[i].posicion == casillasTeletransporte[j].casilla2)
                  {
                      std::cout << "Has caido en la casilla " << casillasTeletransporte[j].casilla2 << ". Retrocedes hasta la casilla " << casillasTeletransporte[j].casilla1 << std::endl;
-                     Sleep(ESPERA_DESPUES_DE_TELETRANPORTE);
+                     Sleep(ESPERA_DESPUES_DE_TELETRANSPORTE);
                      datosJugadores[i].posicion = casillasTeletransporte[j].casilla1;
                      mostrarTablero(datosJugadores, i);
                      break;
