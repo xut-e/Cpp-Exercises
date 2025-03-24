@@ -33,6 +33,7 @@
      const int identificador;
      int posicion;
      bool tieneObjeto;
+     int idObjeto; // -1 es sin objeto
  };
  
  struct ObjetosAleatorios {
@@ -46,6 +47,10 @@
          {19, 24},
          {31, 40}
      };
+ }
+ 
+ std::vector<int> inicializarCasillasObjetos() {
+     return {3, 13, 23, 33, 43};
  }
  
  void mostrarTablero(std::vector<Jugadores>& jugadores) {
@@ -74,8 +79,8 @@
  
  std::vector<Jugadores> inicializarJugadores() {
      return {
-         {1, 1, false},
-         {2, 1, false}
+         {1, 1, false, -1},
+         {2, 1, false, -1}
      };
  }
  
@@ -87,31 +92,122 @@
      };
  }
  
- void objetoAleatorio(int idJugador, std::vector<Jugadores>& jugadores) {
+ bool objetoAleatorio(int idJugador, std::vector<Jugadores>& jugadores, std::vector<ObjetosAleatorios> listaObjetos) {
+     int opcion;
+ 
      if (jugadores[idJugador].tieneObjeto)
      {
-         std::cout << "Posees un objeto, deseas utilizarlo?";
+         if (jugadores[idJugador].idObjeto == -1)
+         {
+             return false;
+         }
+ 
+         std::cout << "Posees un objeto: " << listaObjetos[jugadores[idJugador].idObjeto].breveDescripcion << std::endl;
+         std::cout << "Deseas utilizarlo?" << std::endl;
+         std::cout << "\t" << "1) Si." << std::endl;
+         std::cout << "\t" << "2) No." << std::endl;
+         std::cout << "Elige una opcion: " << std::endl;
+         do
+         {
+             std::cin >> opcion;
+         } while (opcion != 1 && opcion != 2);
+ 
+         if (opcion == 1)
+         {
+             return true;
+         }
      }
+ 
+     return false;
  }
+ 
+ int tirarDado() {
+ 
+ }
+ 
+ int objetoUno() {
+     int sumaTotal;
+ 
+     sumaTotal += tirarDado();
+     sumaTotal += tirarDado();
+ 
+     return sumaTotal;
+ }
+ 
+ int objetoDos(int idJugadorActual) {
+ 
+     return tirarDado();
+ }
+ 
+ int objetoTres() {
+     int opcion;
+ 
+     std::cout << "Puedes decidir si avanzar, de manera manual un total de 1, 2 o 3 casillas: ";
+     do
+     {
+         std::cin >> opcion;
+     } while (opcion < 1 || opcion > 3);
+     
+     return opcion;
+ }
+ 
+ 
  
  void jugar() {
      srand(time(0));
+ 
+     bool utilizarObjeto;
  
      std::vector<Jugadores> datosJugadores = inicializarJugadores();
  
      std::vector<CasillasConectadas> casillasTeletransporte = inicializarListaCasillasTeletransporte();
  
-     inicializarObjetosAleatorios();
+     std::vector<ObjetosAleatorios> listaObjetos =  inicializarObjetosAleatorios();
+ 
+     std::vector<int> liscaCasillasObjetos = inicializarCasillasObjetos();
  
      while (!( datosJugadores[JUGADOR_1].posicion == MAX_CASILLAS || datosJugadores[JUGADOR_2].posicion == MAX_CASILLAS))
      {
          for (int i = 0; i < JUGADORES; i++)
          {
+             int avanzar;
+ 
              std::cout << "TURNO DEL JUGADOR " << i + 1;
  
              mostrarTablero(datosJugadores);
  
-             objetoAleatorio(i, datosJugadores);
+             utilizarObjeto = objetoAleatorio(i, datosJugadores, listaObjetos);
+ 
+             if (utilizarObjeto)
+             {
+                 if (datosJugadores[i].idObjeto == 1)
+                 {
+                     avanzar = objetoUno();
+                 }
+                 else if (datosJugadores[i].idObjeto == 2)
+                 {
+                     int enemigo;
+ 
+                     if (datosJugadores[i].identificador == JUGADOR_1)
+                     {
+                         enemigo = JUGADOR_2;
+                     }
+                     else if (datosJugadores[i].identificador == JUGADOR_2)
+                     {
+                         enemigo = JUGADOR_1;
+                     }
+ 
+                     int retrocederEnemigo = objetoDos(datosJugadores[enemigo].identificador);
+ 
+                     avanzar = tirarDado();
+                 }
+                 else if (datosJugadores[i].idObjeto == 3)
+                 {
+                     avanzar = objetoTres();
+                 }
+             }
+ 
+             avanzar = tirarDado();
          }
      }
  
